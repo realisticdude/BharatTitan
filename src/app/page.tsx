@@ -1,65 +1,101 @@
-import Image from "next/image";
+"use client";
+
+import React from 'react';
+import { motion } from 'motion/react';
+import { ArrowRight, Activity, Zap } from 'lucide-react';
+import { DataStreamBackground } from '@/components/DataStreamBackground';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="relative min-h-screen overflow-hidden bg-background">
+      
+      {/* 1. Canvas Data Stream Background */}
+      <DataStreamBackground />
+
+      {/* 2. Hero Image Integration (Blended) */}
+      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-60">
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10"></div>
+        <img 
+            src="/hero-wolf.png" 
+            alt="Futuristic Wolf Pack" 
+            className="w-full h-full object-cover object-center mix-blend-lighten"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        {/* Color Overlay to harmonize with theme */}
+        <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10"></div>
+      </div>
+
+      {/* 3. Content Layer */}
+      <div className="relative z-20 min-h-screen flex flex-col items-center justify-center px-6 text-center pt-24">
+        
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="mb-8 inline-flex items-center gap-3 px-5 py-2 rounded-full border border-accent/30 bg-background/80 backdrop-blur-xl shadow-lg shadow-accent/20"
+        >
+          <Zap size={14} className="text-accent fill-accent animate-pulse" />
+          <span className="text-white text-xs font-orbitron tracking-[0.3em] uppercase">
+            System Overdrive Active
+          </span>
+        </motion.div>
+
+        {/* Main Heading */}
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.9] mb-8 tracking-tighter"
+        >
+          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">LEAD THE</span>
+          <span className="relative inline-block">
+             <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent/80 to-accent/60">PACK</span>
+             {/* Text Glow */}
+             <span className="absolute inset-0 text-accent opacity-50 blur-lg z-0">PACK</span>
+          </span>
+        </motion.h1>
+
+        {/* Subheading */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="text-muted-foreground text-lg md:text-2xl max-w-3xl mx-auto mb-12 font-sans font-light leading-relaxed tracking-wide"
+        >
+          Harness the velocity of <span className="text-white font-medium">next-gen data streams</span>. 
+          We engineer the digital alpha.
+        </motion.p>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg"
+        >
+          <Link 
+            href="/contact"
+            className="group relative w-full sm:w-auto px-8 py-5 bg-accent text-white font-orbitron font-bold tracking-widest uppercase overflow-hidden clip-path-slant hover:bg-accent/90 transition-all duration-300 shadow-lg shadow-accent/40 hover:shadow-accent/60"
+            style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              JOIN THE HUNT <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </span>
+          </Link>
+
+          <Link 
+            href="/products"
+            className="group relative w-full sm:w-auto px-8 py-5 bg-transparent border border-white/20 text-white font-orbitron font-bold tracking-widest uppercase overflow-hidden hover:bg-white/5 transition-all duration-300 backdrop-blur-sm"
+            style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
           >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              VIEW ARSENAL <Activity size={20} className="group-hover:text-accent transition-colors" />
+            </span>
+          </Link>
+        </motion.div>
+      </div>
     </div>
   );
 }
