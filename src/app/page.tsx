@@ -10,20 +10,22 @@ export default function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       
-      {/* 1. Canvas Data Stream Background */}
-      <DataStreamBackground />
+      {/* 1. Canvas Data Stream Background - Hidden in Light Mode for clarity */}
+      <div className="dark:block hidden">
+        <DataStreamBackground />
+      </div>
 
       {/* 2. Hero Image Integration (Blended) */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-60">
+      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-90 dark:opacity-60 transition-opacity">
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-10"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10"></div>
         <img 
             src="/hero-wolf.png" 
             alt="Futuristic Wolf Pack" 
-            className="w-full h-full object-cover object-center mix-blend-lighten"
+            className="w-full h-full object-cover object-center mix-blend-normal dark:mix-blend-lighten opacity-50 dark:opacity-100"
         />
-        {/* Color Overlay to harmonize with theme */}
-        <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10"></div>
+        {/* Color Overlay - Dark Mode Only */}
+        <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10 hidden dark:block"></div>
       </div>
 
       {/* 3. Content Layer */}
@@ -47,13 +49,13 @@ export default function Home() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black text-white leading-[0.9] mb-8 tracking-tighter"
+          className="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black text-foreground leading-[0.9] mb-8 tracking-tighter"
         >
-          <span className="block text-transparent bg-clip-text bg-gradient-to-b from-white to-white/50">LEAD THE</span>
+          <span className="block text-foreground dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-b dark:from-white dark:to-white/50">LEAD THE</span>
           <span className="relative inline-block">
-             <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent/80 to-accent/60">PACK</span>
-             {/* Text Glow */}
-             <span className="absolute inset-0 text-accent opacity-50 blur-lg z-0">PACK</span>
+             <span className="relative z-10 text-accent dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-accent dark:via-accent/80 dark:to-accent/60">PACK</span>
+             {/* Text Glow - Dark Mode Only */}
+             <span className="absolute inset-0 text-accent opacity-50 blur-lg z-0 hidden dark:block">PACK</span>
           </span>
         </motion.h1>
 
@@ -62,10 +64,10 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="text-muted-foreground text-lg md:text-2xl max-w-3xl mx-auto mb-12 font-sans font-light leading-relaxed tracking-wide"
+          className="text-muted-foreground text-lg md:text-2xl max-w-2xl mb-12 font-sans tracking-wide"
         >
-          Harness the velocity of <span className="text-white font-medium">next-gen data streams</span>. 
-          We engineer the digital alpha.
+          We engineer elite digital systems that redefine performance. 
+          BharatTitan is the force behind India's next-gen innovation.
         </motion.p>
 
         {/* Action Buttons */}
@@ -525,13 +527,13 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <Link 
                   href="/contact"
-                  className="w-full sm:w-auto px-10 py-5 bg-white text-accent font-orbitron font-bold tracking-[0.2em] uppercase hover:bg-white/90 transition-all duration-300 shadow-xl"
+                  className="w-full sm:w-auto px-10 py-5 bg-accent text-grey-foreground font-orbitron font-bold tracking-[0.2em] uppercase hover:bg-accent/90 transition-all duration-300 shadow-xl dark:bg-white dark:text-accent dark:hover:bg-white/90"
                 >
                   INITIATE CONTACT
                 </Link>
                 <Link 
                   href="/services"
-                  className="w-full sm:w-auto px-10 py-5 bg-transparent border border-white/40 text-white font-orbitron font-bold tracking-[0.2em] uppercase hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+                  className="w-full sm:w-auto px-10 py-5 bg-transparent border border-foreground/40 text-foreground font-orbitron font-bold tracking-[0.2em] uppercase hover:bg-foreground/10 transition-all duration-300 backdrop-blur-sm dark:border-white/40 dark:text-white dark:hover:bg-white/10"
                 >
                   VIEW SERVICES
                 </Link>

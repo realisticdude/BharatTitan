@@ -82,19 +82,19 @@
   --chart-5: oklch(0.645 0.246 16.439);
 }
 
-.light {
-  --background: #F5F7FA;
-  --foreground: #0A0D12;
+html.light, .light {
+  --background: #F4F6F8;
+  --foreground: #0B0F14;
   --card: #FFFFFF;
-  --card-foreground: #0A0D12;
+  --card-foreground: #0B0F14;
   --popover: #FFFFFF;
-  --popover-foreground: #0A0D12;
-  --primary: #0A0D12;
-  --primary-foreground: #F5F7FA;
+  --popover-foreground: #0B0F14;
+  --primary: #0B0F14;
+  --primary-foreground: #FFFFFF;
   --secondary: #E2E8F0;
-  --secondary-foreground: #0A0D12;
+  --secondary-foreground: #0B0F14;
   --muted: #F1F5F9;
-  --muted-foreground: #5C6672;
+  --muted-foreground: #5B6572;
   --accent: #FF3B00;
   --accent-foreground: #FFFFFF;
   --border: #E2E8F0;
@@ -104,7 +104,7 @@
 
 /* Global Transition */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease, filter 250ms ease;
 }
 
 /* Light Mode Shadow Overrides */
@@ -113,14 +113,100 @@
 .light .shadow-accent\/40,
 .light .shadow-accent\/50,
 .light .shadow-accent\/60,
+.light .shadow-lg,
+.light .shadow-xl,
 .light .shadow-\[0_0_10px_var\(--accent\)\] {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+.light .shadow-xl {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Button Shadow Override */
+.light .bg-accent.shadow-\[0_0_15px_rgba\(255\,59\,47\,0\.3\)\],
+.light .bg-accent.shadow-xl {
+  box-shadow: 0 6px 20px rgba(255, 59, 0, 0.25) !important;
 }
 
 .light .drop-shadow-\[0_0_10px_var\(--accent\)\],
 .light .drop-shadow-\[0_0_15px_var\(--accent\)\],
 .light .drop-shadow-\[0_0_15px_rgba\(var\(--accent\)\,0\.3\)\] {
   filter: none !important;
+}
+
+/* Remove dark mode specific effects in light mode */
+.light .backdrop-blur-xl,
+.light .backdrop-blur-md,
+.light .backdrop-blur-sm {
+  backdrop-filter: none !important;
+}
+
+.light .bg-background\/80,
+.light .bg-background\/60,
+.light .bg-card\/20,
+.light .bg-card\/10,
+.light .bg-card\/40,
+.light .bg-card\/50 {
+  background-color: var(--card) !important;
+}
+
+.light .bg-accent\/10,
+.light .bg-accent\/5 {
+  background-color: transparent !important;
+}
+
+.light .border-accent\/30,
+.light .border-white\/5,
+.light .border-white\/10,
+.light .border-white\/40 {
+  border-color: var(--border) !important;
+}
+
+.light .text-muted-foreground {
+  color: var(--muted-foreground) !important;
+}
+
+.light .text-white\/90,
+.light .text-white\/80,
+.light .text-white\/70,
+.light .text-white\/60 {
+  color: var(--muted-foreground) !important;
+}
+
+.light .text-white {
+  color: var(--foreground) !important;
+}
+
+/* Ensure white text on accent background in light mode */
+.light .bg-accent .text-white,
+.light .bg-accent.text-white,
+.light .hover\:bg-accent:hover {
+  color: #FFFFFF !important;
+}
+
+.light .bg-white.text-accent {
+  background-color: var(--accent) !important;
+  color: #FFFFFF !important;
+}
+
+.light .bg-transparent.border-white\/40.text-white {
+  background-color: var(--card) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+/* Force dark text for hero title in light mode */
+.light h1 span, 
+.light h1 {
+  color: var(--foreground) !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+}
+
+.light h1 .text-accent {
+  color: var(--accent) !important;
+  -webkit-text-fill-color: var(--accent) !important;
 }
 
 /* Add custom styles from index.css */

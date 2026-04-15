@@ -51,14 +51,20 @@ export const Navbar = () => {
     const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
     if (savedTheme) {
       setTheme(savedTheme);
-      document.documentElement.className = savedTheme;
+      document.documentElement.classList.remove('dark', 'light');
+      document.documentElement.classList.add(savedTheme);
+    } else {
+      // Default to dark if not set
+      document.documentElement.classList.remove('dark', 'light');
+      document.documentElement.classList.add('dark');
     }
   }, []);
 
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     setTheme(newTheme);
-    document.documentElement.className = newTheme;
+    document.documentElement.classList.remove('dark', 'light');
+    document.documentElement.classList.add(newTheme);
     localStorage.setItem('theme', newTheme);
   };
 
@@ -189,11 +195,11 @@ export const Navbar = () => {
                 key={link.name}
                 href={link.href}
                 className={`relative text-sm font-bold tracking-widest uppercase transition-all duration-300 group ${
-                  pathname === link.href ? 'text-[#FF3B2F]' : 'text-[#BFCAD3] hover:text-white'
+                  pathname === link.href ? 'text-accent' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {link.name}
-                <span className={`absolute -bottom-1 left-0 w-0 h-[1px] bg-[#FF3B2F] transition-all duration-300 group-hover:w-full ${
+                <span className={`absolute -bottom-1 left-0 w-0 h-[1px] bg-accent transition-all duration-300 group-hover:w-full ${
                   pathname === link.href ? 'w-full' : ''
                 }`}></span>
               </Link>
@@ -202,7 +208,7 @@ export const Navbar = () => {
 
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden text-white p-2"
+            className="md:hidden text-foreground p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -218,7 +224,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-[#0B0F14] md:hidden pt-24 px-6"
+            className="fixed inset-0 z-40 bg-background md:hidden pt-24 px-6"
           >
             <div className="flex flex-col gap-8">
               {navLinks.map((link, i) => (
@@ -232,7 +238,7 @@ export const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
                     className={`text-2xl font-orbitron font-bold tracking-wider ${
-                      pathname === link.href ? 'text-[#FF3B2F]' : 'text-white'
+                      pathname === link.href ? 'text-accent' : 'text-foreground'
                     }`}
                   >
                     {link.name}

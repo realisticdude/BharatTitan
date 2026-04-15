@@ -89,7 +89,7 @@ export const Footer = () => {
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-10 h-10 rounded-lg bg-card/50 flex items-center justify-center text-muted-foreground hover:text-white hover:bg-accent hover:shadow-[0_0_15px_rgba(var(--accent),0.5)] transition-all duration-300 hover:scale-110"
+        className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent hover:shadow-[0_0_15px_rgba(var(--accent),0.5)] transition-all duration-300 hover:scale-110"
       >
         <Icon size={18} />
       </a>
