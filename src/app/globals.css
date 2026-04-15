@@ -67,8 +67,17 @@
   100% { transform: translateX(-50%); }
 }
 
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
 .animate-scroll-flow {
   animation: scrollFlow 30s linear infinite;
+}
+
+.animate-scan {
+  animation: scan 3s linear infinite;
 }
 
 .animate-scroll-flow:hover {
@@ -144,9 +153,9 @@ html.light, .light {
   --ring: #FF3B00;
 }
 
-/* Global Transition */
-* {
-  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease, filter 250ms ease;
+/* Smooth theme transitions for specific properties only */
+.theme-transition {
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
 }
 
 /* Light Mode Shadow Overrides */

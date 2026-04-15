@@ -1,51 +1,56 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform, useMotionValue } from 'framer-motion';
 import { ArrowRight, Activity, Zap, CheckCircle2, HelpCircle, Code, Server, Layers, Layout, Database, Rocket } from 'lucide-react';
 import { DataStreamBackground } from '@/components/DataStreamBackground';
 import Link from 'next/link';
 
-// Helper component for counting numbers
+// Helper component for counting numbers using Framer Motion's useSpring for performance
 const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: number }) => {
-  const [count, setCount] = useState(0);
   const [isInView, setIsInView] = useState(false);
   const countRef = React.useRef(null);
+  
   const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
   const suffix = value.replace(/[0-9]/g, '');
 
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, {
+    damping: 30,
+    stiffness: 100,
+  });
+
+  const displayValue = useTransform(springValue, (latest) => Math.round(latest));
+
   useEffect(() => {
-    if (!isInView) return;
-    
-    let start = 0;
-    const end = numericValue;
-    if (start === end) return;
-
-    let totalMiliseconds = duration * 1000;
-    let incrementTime = (totalMiliseconds / end);
-
-    let timer = setInterval(() => {
-      start += 1;
-      setCount(start);
-      if (start === end) clearInterval(timer);
-    }, incrementTime);
-
-    return () => clearInterval(timer);
-  }, [numericValue, duration, isInView]);
+    if (isInView) {
+      motionValue.set(numericValue);
+    }
+  }, [isInView, numericValue, motionValue]);
 
   return (
     <motion.span
       ref={countRef}
       onViewportEnter={() => setIsInView(true)}
     >
-      {count}{suffix}
+      <motion.span>{displayValue}</motion.span>
+      {suffix}
     </motion.span>
   );
 };
 
 export default function Home() {
   const [isBooted, setIsBooted] = useState(false);
-  const [activeActivityImage, setActiveActivityImage] = useState("/demo-activity-1.jpg");
+  const [activeActivityImage, setActiveActivityImage] = useState<string | null>(null);
+  const [activeWhoIndex, setActiveWhoIndex] = useState(0);
+
+  useEffect(() => {
+    // Auto-cycle "Who We Build For" highlights
+    const whoTimer = setInterval(() => {
+      setActiveWhoIndex((prev) => (prev + 1) % 4);
+    }, 3000);
+    return () => clearInterval(whoTimer);
+  }, []);
 
   useEffect(() => {
     // Initial boot sequence delay
@@ -249,7 +254,7 @@ export default function Home() {
           <motion.img 
             src="/demo-automation-bg.png" 
             alt="" 
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain will-change-transform"
             animate={{ rotate: 360 }}
             transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
             style={{ scale: 1.5 }}
@@ -358,22 +363,39 @@ export default function Home() {
                   key={i} 
                   initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
                   whileInView={{ opacity: 1, scale: 1, x, y }}
+                  animate={{ 
+                    scale: i === activeWhoIndex ? 1.1 : 1,
+                    borderColor: i === activeWhoIndex ? "rgba(255,59,0,0.5)" : "rgba(255,255,255,0.05)",
+                    boxShadow: i === activeWhoIndex ? "0 0 30px rgba(255,59,0,0.2)" : "none",
+                    zIndex: i === activeWhoIndex ? 20 : 10
+                  }}
                   transition={{ duration: 0.8, delay: i * 0.2, ease: "easeOut" }}
                   viewport={viewportConfig}
-                  className="absolute p-6 bg-card/20 border border-white/5 hover:border-accent/20 transition-all flex flex-col items-center text-center gap-3 backdrop-blur-md w-48 md:w-56 group"
+                  onMouseEnter={() => setActiveWhoIndex(i)}
+                  className={`absolute p-6 bg-card/20 border transition-all flex flex-col items-center text-center gap-3 backdrop-blur-md w-48 md:w-56 group cursor-pointer ${i === activeWhoIndex ? 'bg-accent/10' : ''}`}
                 >
                   <motion.div 
                     initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
                     whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                    animate={{
+                      scale: i === activeWhoIndex ? 1.2 : 1,
+                      backgroundColor: i === activeWhoIndex ? "rgba(255,59,0,0.2)" : "rgba(0,0,0,1)"
+                    }}
                     transition={{ type: "spring", stiffness: 200, damping: 15, delay: i * 0.2 + 0.3 }}
                     className="w-10 h-10 bg-background border border-accent/20 flex items-center justify-center rounded-lg group-hover:border-accent/50 transition-colors"
                   >
-                    <item.icon size={18} className="text-accent" />
+                    <item.icon size={18} className={`transition-colors ${i === activeWhoIndex ? 'text-accent' : 'text-accent/70'}`} />
                   </motion.div>
                   <div>
-                    <h3 className="font-orbitron text-xs font-bold text-white mb-2 group-hover:text-accent transition-colors">{item.title}</h3>
-                    <p className="text-muted-foreground text-[10px] uppercase tracking-widest leading-tight">{item.desc}</p>
+                    <h3 className={`font-orbitron text-xs font-bold transition-colors mb-2 ${i === activeWhoIndex ? 'text-accent' : 'text-white'}`}>{item.title}</h3>
+                    <p className={`transition-colors text-[10px] uppercase tracking-widest leading-tight ${i === activeWhoIndex ? 'text-white/90' : 'text-muted-foreground'}`}>{item.desc}</p>
                   </div>
+                  {i === activeWhoIndex && (
+                    <motion.div 
+                      layoutId="who-active-dot"
+                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_rgba(255,59,0,1)]"
+                    />
+                  )}
                 </motion.div>
               );
             })}
@@ -382,8 +404,13 @@ export default function Home() {
       </section>
 
       {/* 5.3 Tech Stack Preview */}
-      <section className="relative z-20 py-24 px-6 bg-accent/5 border-y border-white/5">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative z-20 py-24 px-6 bg-accent/5 border-y border-white/5 overflow-hidden">
+        {/* Energy Background */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="w-full h-full bg-[radial-gradient(circle_at_20%_20%,rgba(255,100,0,0.15),transparent_40%)]"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -396,31 +423,90 @@ export default function Home() {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {[
-              { label: "Frontend", val: "React / Next.js", icon: Layout },
-              { label: "Backend", val: "Node.js", icon: Code },
-              { label: "Automation", val: "n8n", icon: Activity },
-              { label: "Cloud", val: "AWS", icon: Server },
-              { label: "Database", val: "MongoDB / PostgreSQL", icon: Database }
+              { 
+                label: "Frontend", 
+                val: "React / Next.js", 
+                icon: (props: any) => (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} className={`${props.className} text-[#61DAFB]`}>
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                    <path d="M12 7c3.31 0 6 2.24 6 5s-2.69 5-6 5-6-2.24-6-5 2.69-5 6-5z"/>
+                    <path d="M12 7c3.31 0 6 2.24 6 5s-2.69 5-6 5-6-2.24-6-5 2.69-5 6-5z" transform="rotate(60 12 12)"/>
+                    <path d="M12 7c3.31 0 6 2.24 6 5s-2.69 5-6 5-6-2.24-6-5 2.69-5 6-5z" transform="rotate(120 12 12)"/>
+                  </svg>
+                )
+              },
+              { 
+                label: "Backend", 
+                val: "Node.js", 
+                icon: (props: any) => (
+                  <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#339933]`}>
+                    <path d="M11.992 0L3.18 5.087v10.174l8.812 5.087 8.812-5.087V5.087zm0 18.23l-7.05-4.07V6.027l7.05-4.07 7.05 4.07v8.133z"/>
+                    <path d="M11.992 4.103L6.117 7.493v6.78l5.875 3.39 5.875-3.39V7.493z"/>
+                  </svg>
+                )
+              },
+              { 
+                label: "Automation", 
+                val: "n8n", 
+                icon: (props: any) => (
+                  <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#FF6C5C]`}>
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.5 17.5l-2.5-1.5-2.5 1.5V11l5 3v3.5zM7.5 6.5l2.5 1.5 2.5-1.5V13l-5-3V6.5z"/>
+                  </svg>
+                )
+              },
+              { 
+                label: "Cloud", 
+                val: "AWS", 
+                icon: (props: any) => (
+                  <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#FF9900]`}>
+                    <path d="M13.882 11.235c.01-.15.01-.301 0-.45l-.031-.15a.417.417 0 0 0-.15-.15c-.05-.031-.1-.05-.15-.05-.1 0-.2.05-.25.1a.456.456 0 0 0-.1.25c-.01.15-.01.301 0 .45l.031.15c.031.05.07.1.1.15.05.031.1.05.15.05.1 0 .2-.05.25-.1a.456.456 0 0 0 .1-.25z"/>
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.05 14.95l-1.45.6c-.15.05-.35.1-.55.1h-.25c-.35 0-.7-.1-.9-.35l-.35-.35c-.15-.15-.25-.3-.35-.5-.1-.2-.15-.4-.2-.65v-.7c.05-.25.1-.5.2-.75.1-.2.2-.4.35-.55l.35-.35c.2-.25.55-.35.9-.35h.25c.2 0 .4 0 .55.1l1.45.6c.15.05.25.15.25.3s-.05.25-.2.3l-1.4.65c-.05.05-.1.05-.1.1v.2c0 .05.05.05.1.1l1.4.65c.15.05.2.15.2.3 0 .15-.1.25-.25.3zM9.55 12.8c.05.1.05.2.1.3s.05.15.05.25v.1c0 .1-.05.2-.1.3-.05.1-.15.2-.25.25l-.45.2c-.15.05-.3.1-.45.1-.1 0-.2 0-.3-.05l-.35-.15-.3-.2c-.1-.1-.15-.2-.2-.3-.05-.1-.05-.2-.1-.3v-.1c0-.1.05-.2.1-.3.05-.1.15-.2.25-.25l.45-.2c.15-.05.3-.1.45-.1.1 0 .2 0 .3.05l.35.15.3.2z"/>
+                  </svg>
+                )
+              },
+              { 
+                label: "Database", 
+                val: "MongoDB / PostgreSQL", 
+                icon: (props: any) => (
+                  <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#47A248]`}>
+                    <path d="M12 0L3.18 5.087v10.174l8.812 5.087 8.812-5.087V5.087zm0 18.23l-7.05-4.07V6.027l7.05-4.07 7.05 4.07v8.133z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                )
+              }
             ].map((item, i) => (
               <motion.div 
                 key={i} 
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: i * 0.12, ease: "easeOut" }}
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
                 viewport={viewportConfig}
-                className="relative p-6 bg-background/50 border border-white/10 rounded-xl backdrop-blur-sm group hover:border-accent/30 transition-all overflow-hidden"
+                className="relative p-6 bg-background/50 border border-white/10 rounded-xl backdrop-blur-sm group hover:border-accent transition-all duration-500 overflow-hidden hover:-translate-y-[6px] hover:scale-[1.02] hover:shadow-[0_0_25px_rgba(255,80,0,0.25)] will-change-transform"
               >
                 {/* Hover Image Layer */}
-                <div className="absolute inset-0 opacity-20 group-hover:opacity-50 transition-all duration-500 scale-110 group-hover:scale-100 pointer-events-none">
+                <div className="absolute inset-0 opacity-20 group-hover:opacity-50 transition-all duration-700 scale-110 group-hover:scale-105 pointer-events-none">
                   <img src="/demo-tech.webp" alt="" className="w-full h-full object-cover" />
                 </div>
 
-                <div className="relative z-10 flex items-center gap-3 mb-4 text-accent">
-                  <item.icon size={14} />
-                  <span className="text-[10px] font-orbitron uppercase tracking-widest">{item.label}</span>
+                {/* Scanning Line Effect */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <div className="absolute w-full h-[2px] bg-accent opacity-0 group-hover:opacity-100 animate-scan"></div>
                 </div>
-                <div className="relative z-10 text-white font-mono text-xs opacity-70 group-hover:opacity-100 transition-opacity">
+
+                {/* Live Status Dot */}
+                <div className="absolute top-3 right-3 w-1.5 h-1.5 bg-accent rounded-full animate-pulse z-20 shadow-[0_0_8px_var(--accent)]"></div>
+
+                <div className="relative z-10 flex items-center gap-3 mb-4">
+                  <item.icon className="w-5 h-5 transition-all duration-300 group-hover:scale-110 group-hover:rotate-6" />
+                  <span className="text-[10px] font-orbitron uppercase tracking-widest text-accent group-hover:text-white transition-colors duration-300 group-hover:[text-shadow:0_0_10px_rgba(255,100,0,0.6)]">{item.label}</span>
+                </div>
+                <div className="relative z-10 text-white font-mono text-xs opacity-70 group-hover:opacity-100 transition-all duration-300 group-hover:[text-shadow:0_0_8px_rgba(255,255,255,0.4)]">
                   {item.val}
+                </div>
+
+                {/* Micro Label */}
+                <div className="absolute bottom-2 right-3 text-[8px] font-orbitron text-accent/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 tracking-tighter">
+                   &gt; MODULE ACTIVE
                 </div>
               </motion.div>
             ))}
@@ -449,7 +535,7 @@ export default function Home() {
               {[
                 { text: "Automation workflow deployed", time: "2d ago", img: "/demo-activity-1.png" },
                 { text: "Client system updated", time: "5d ago", img: "/demo-activity-2.webp" },
-                { text: "API integration completed", time: "1w ago", img: "/demo-activity-3.png" }
+                { text: "API integration completed", time: "1w ago", img: "/demo-activity-3.webp" }
               ].map((item, i) => (
                 <motion.div 
                   key={i}
@@ -458,6 +544,7 @@ export default function Home() {
                   transition={{ duration: 0.7, delay: i * 0.15, ease: "easeOut" }}
                   viewport={viewportConfig}
                   onMouseEnter={() => setActiveActivityImage(item.img)}
+                  onMouseLeave={() => setActiveActivityImage(null)}
                   className="flex items-center justify-between p-4 bg-card/20 border-l-2 border-accent/30 hover:border-accent hover:bg-card/40 transition-all cursor-crosshair group"
                 >
                   <div className="flex items-center gap-4">
@@ -475,21 +562,27 @@ export default function Home() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
               viewport={viewportConfig}
-              className="hidden md:block w-1/2 relative group"
+              className="hidden md:block w-1/2 relative group self-start"
             >
-              <div className="absolute inset-0 bg-accent/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <div className="relative h-full min-h-[300px] border border-white/5 rounded-lg overflow-hidden bg-card/20 backdrop-blur-sm">
-                <motion.img 
-                  key={activeActivityImage}
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 0.6, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  src={activeActivityImage} 
-                  alt="Activity Preview"
-                  className="w-full h-full object-cover" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
-                <div className="absolute bottom-4 left-4 flex items-center gap-2">
+              {/* Glow in the background */}
+              <div className="absolute inset-0 bg-accent/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10"></div>
+              
+              <div className="relative h-[350px] w-full border border-white/5 rounded-lg overflow-hidden bg-black backdrop-blur-sm">
+                {activeActivityImage ? (
+                  <motion.img 
+                    key={activeActivityImage}
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    src={activeActivityImage} 
+                    alt="Activity Preview"
+                    className="w-full h-full object-cover relative z-10" 
+                  />
+                ) : (
+                  <div className="w-full h-full bg-black relative z-10"></div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20"></div>
+                <div className="absolute bottom-4 left-4 flex items-center gap-2 z-30">
                   <div className="w-2 h-2 rounded-full bg-accent animate-ping"></div>
                   <span className="text-[10px] font-orbitron text-accent tracking-[0.2em]">LIVE_PREVIEW_ACTIVE</span>
                 </div>
@@ -602,7 +695,7 @@ export default function Home() {
 
           <div className="relative overflow-hidden">
             {/* Continuous Motion Container */}
-            <div className="flex animate-scroll-flow whitespace-nowrap py-10">
+            <div className="flex animate-scroll-flow whitespace-nowrap py-10 will-change-transform">
               {[...Array(2)].map((_, listIndex) => (
                 <div key={listIndex} className="flex gap-8 px-4">
                   {[
@@ -668,7 +761,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.15, ease: "easeOut" }}
                 viewport={viewportConfig}
-                className="flex items-start gap-4 text-steel-blade text-sm font-sans dark:text-slate-400"
+                className="flex items-start gap-4 text-grey-800 text-sm font-sans dark:text-slate-600"
               >
                 <CheckCircle2 size={18} className="text-accent shrink-0 mt-0.5" />
                 <span className="tracking-wide">{text}</span>
@@ -689,11 +782,7 @@ export default function Home() {
             className="relative overflow-hidden bg-accent p-12 md:p-20 shadow-2xl shadow-accent/40 text-center"
             style={{ clipPath: 'polygon(5% 0, 100% 0, 100% 85%, 95% 100%, 0 100%, 0 15%)' }}
           >
-            <motion.div 
-              animate={{ opacity: [0.1, 0.2, 0.1] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_70%)]"
-            />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_70%)] opacity-20" />
             
             <div className="relative z-10">
               <motion.h2 
