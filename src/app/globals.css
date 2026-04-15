@@ -62,6 +62,19 @@
   }
 }
 
+@keyframes scrollFlow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll-flow {
+  animation: scrollFlow 30s linear infinite;
+}
+
+.animate-scroll-flow:hover {
+  animation-play-state: paused;
+}
+
 :root {
   /* Dark Mode Variables (Refined Cyber-Organic Palette) */
   /* Background: Deep void black with slight blue tint */

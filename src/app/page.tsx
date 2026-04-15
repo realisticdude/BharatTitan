@@ -1,24 +1,82 @@
 "use client";
 
-import React from 'react';
-import { motion } from 'motion/react';
-import { ArrowRight, Activity, Zap, CheckCircle2, Terminal, Globe, Layers, Layout, Shield, HelpCircle, Code, Server, Cpu, Rocket, Database } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { ArrowRight, Activity, Zap, CheckCircle2, HelpCircle, Code, Server, Layers, Layout, Database, Rocket } from 'lucide-react';
 import { DataStreamBackground } from '@/components/DataStreamBackground';
 import Link from 'next/link';
 
+// Helper component for counting numbers
+const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: number }) => {
+  const [count, setCount] = useState(0);
+  const [isInView, setIsInView] = useState(false);
+  const countRef = React.useRef(null);
+  const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
+  const suffix = value.replace(/[0-9]/g, '');
+
+  useEffect(() => {
+    if (!isInView) return;
+    
+    let start = 0;
+    const end = numericValue;
+    if (start === end) return;
+
+    let totalMiliseconds = duration * 1000;
+    let incrementTime = (totalMiliseconds / end);
+
+    let timer = setInterval(() => {
+      start += 1;
+      setCount(start);
+      if (start === end) clearInterval(timer);
+    }, incrementTime);
+
+    return () => clearInterval(timer);
+  }, [numericValue, duration, isInView]);
+
+  return (
+    <motion.span
+      ref={countRef}
+      onViewportEnter={() => setIsInView(true)}
+    >
+      {count}{suffix}
+    </motion.span>
+  );
+};
+
 export default function Home() {
+  const [isBooted, setIsBooted] = useState(false);
+  const [activeActivityImage, setActiveActivityImage] = useState("/demo-activity-1.jpg");
+
+  useEffect(() => {
+    // Initial boot sequence delay
+    const timer = setTimeout(() => setIsBooted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const viewportConfig = { once: true, margin: "-100px" };
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       
       {/* Hero Section Container */}
       <section className="relative min-h-[90vh] overflow-hidden">
-        {/* 1. Canvas Data Stream Background - Now restricted to Hero Section */}
-        <div className="dark:block hidden absolute inset-0 z-0 pointer-events-none">
+        {/* 1. Canvas Data Stream Background */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={isBooted ? { opacity: 1 } : {}}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="dark:block hidden absolute inset-0 z-0 pointer-events-none"
+        >
           <DataStreamBackground />
-        </div>
+        </motion.div>
 
-        {/* 2. Hero Image Integration (Blended) */}
-        <div className="absolute inset-0 z-0 flex items-center justify-center opacity-90 dark:opacity-60 transition-opacity">
+        {/* 2. Hero Image Integration */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={isBooted ? { opacity: 0.6, scale: 1 } : {}}
+          transition={{ duration: 1.5, delay: 0.1, ease: "easeOut" }}
+          className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
+        >
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-10"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10"></div>
           <img 
@@ -26,9 +84,8 @@ export default function Home() {
               alt="Futuristic Wolf Pack" 
               className="w-full h-full object-cover object-center mix-blend-normal dark:mix-blend-lighten opacity-50 dark:opacity-100"
           />
-          {/* Color Overlay - Dark Mode Only */}
           <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10 hidden dark:block"></div>
-        </div>
+        </motion.div>
 
         {/* 3. Content Layer */}
         <div className="relative z-20 flex flex-col items-center justify-center px-6 text-center pt-24 pb-12 min-h-[90vh]">
@@ -36,8 +93,8 @@ export default function Home() {
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            animate={isBooted ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="mb-8 inline-flex items-center gap-3 px-5 py-2 rounded-full border border-accent/30 bg-background/80 backdrop-blur-xl shadow-lg shadow-accent/20"
           >
             <Zap size={14} className="text-accent fill-accent animate-pulse" />
@@ -48,24 +105,38 @@ export default function Home() {
 
           {/* Main Heading */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             className="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black leading-[0.9] mb-8 tracking-tighter"
           >
-            <span className="block text-transparent bg-clip-text bg-gradient-to-b from-slate-400 via-slate-500 to-slate-400 dark:from-white dark:to-white/50">LEAD THE</span>
-            <span className="relative inline-block">
+            <motion.span 
+              initial={{ opacity: 0, y: 20 }}
+              animate={isBooted ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+              className="block text-transparent bg-clip-text bg-gradient-to-b from-slate-400 via-slate-500 to-slate-400 dark:from-white dark:to-white/50"
+            >
+              LEAD THE
+            </motion.span>
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+              animate={isBooted ? { opacity: 1, scale: 1, filter: "blur(0px)" } : {}}
+              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+              className="relative inline-block"
+            >
                <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent/80 to-accent/60">PACK</span>
-               {/* Text Glow - Now subtle in light mode, stronger in dark */}
-               <span className="absolute inset-0 text-accent opacity-50 dark:opacity-50 blur-lg z-0">PACK</span>
-            </span>
+               <motion.span 
+                 animate={{ opacity: [0.3, 0.6, 0.3] }}
+                 transition={{ duration: 2, repeat: Infinity }}
+                 className="absolute inset-0 text-accent blur-lg z-0"
+               >
+                PACK
+               </motion.span>
+            </motion.span>
           </motion.h1>
 
           {/* Subheading */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            animate={isBooted ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
             className="text-slate-500 dark:text-muted-foreground text-lg md:text-2xl max-w-2xl mb-12 font-sans tracking-wide"
           >
             We engineer elite digital systems that redefine performance. 
@@ -75,8 +146,8 @@ export default function Home() {
           {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+            animate={isBooted ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
             className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg"
           >
             <Link 
@@ -103,7 +174,12 @@ export default function Home() {
       </section>
 
       {/* 4. System Status Strip */}
-      <div className="relative z-20 w-full border-y border-white/5 bg-background/50 backdrop-blur-sm py-4">
+      <motion.div 
+        initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+        animate={isBooted ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+        transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
+        className="relative z-20 w-full border-y border-white/5 bg-background/50 backdrop-blur-sm py-4"
+      >
         <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4 text-[10px] font-orbitron tracking-[0.2em] text-muted-foreground uppercase">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">
@@ -117,17 +193,23 @@ export default function Home() {
           <div>Active Nodes: <span className="text-slate-900 dark:text-white">63</span></div>
           <div>Last Update: <span className="text-slate-900 dark:text-white">2h ago</span></div>
         </div>
-      </div>
+      </motion.div>
 
       {/* 5. Core Capabilities */}
       <section className="relative z-20 py-32 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="mb-16"
+          >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// CORE MODULES</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               CORE <span className="text-accent">CAPABILITIES</span>
             </h2>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -138,10 +220,10 @@ export default function Home() {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
+                initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                viewport={viewportConfig}
                 className="group relative p-8 bg-card/30 backdrop-blur-xl border border-white/5 hover:border-accent/30 transition-all duration-500 overflow-hidden"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 blur-3xl group-hover:bg-accent/10 transition-colors"></div>
@@ -161,14 +243,33 @@ export default function Home() {
       </section>
 
       {/* 5.1 Automation & AI Systems */}
-      <section className="relative z-20 py-32 px-6 border-t border-white/5 bg-accent/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
+      <section className="relative z-20 py-32 px-6 border-t border-white/5 bg-[#000000] overflow-hidden">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 opacity-60 pointer-events-none">
+          <motion.img 
+            src="/demo-automation-bg.png" 
+            alt="" 
+            className="w-full h-full object-contain"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+            style={{ scale: 1.5 }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/20"></div>
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="mb-16"
+          >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// AUTOMATION CORE</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               AUTOMATION & <span className="text-accent">AI SYSTEMS</span>
             </h2>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -179,10 +280,10 @@ export default function Home() {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
+                initial={{ opacity: 0, x: -30, filter: "blur(10px)" }}
+                whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                viewport={viewportConfig}
                 className="group relative p-8 bg-card/40 backdrop-blur-xl border border-white/5 hover:border-accent/30 transition-all duration-500"
               >
                 <div className="absolute top-0 right-0 w-20 h-20 bg-accent/5 blur-3xl group-hover:bg-accent/10 transition-colors"></div>
@@ -198,42 +299,84 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
-          <p className="mt-8 text-muted-foreground text-sm font-sans italic opacity-70">
-            Reducing manual operations with structured systems.
-          </p>
         </div>
       </section>
 
       {/* 5.2 Who We Build For */}
-      <section className="relative z-20 py-32 px-6">
+      <section className="relative z-20 py-32 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="mb-16 text-center"
+          >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// CLIENT TARGETING</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               WHO WE <span className="text-accent">BUILD FOR</span>
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="relative h-[600px] flex items-center justify-center">
+            {/* Circular Path Background */}
+            <svg className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] pointer-events-none opacity-20">
+              <circle 
+                cx="50%" cy="50%" r="48%" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="1" 
+                strokeDasharray="4 4"
+                className="text-accent/30"
+              />
+            </svg>
+
+            {/* Central Core */}
+            <motion.div 
+              initial={{ scale: 0, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              viewport={viewportConfig}
+              className="relative z-10 w-24 h-24 md:w-32 md:h-32 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center backdrop-blur-xl shadow-[0_0_50px_rgba(255,59,0,0.1)]"
+            >
+              <Activity className="text-accent animate-pulse" size={32} />
+            </motion.div>
+
+            {/* Circular Items */}
             {[
-              { title: "Startups", desc: "Building high-performance MVPs", icon: Rocket },
-              { title: "Businesses", desc: "Needing smart automation", icon: Zap },
-              { title: "Founders", desc: "Scaling digital systems", icon: Layers },
-              { title: "Personal Brands", desc: "Portfolios & branding", icon: Layout }
-            ].map((item, i) => (
-              <div key={i} className="p-8 bg-card/20 border border-white/5 hover:border-accent/10 transition-all flex flex-col gap-4">
-                <div className="w-10 h-10 bg-background border border-accent/20 flex items-center justify-center rounded-lg">
-                  {i === 0 && <Activity size={18} className="text-accent" />}
-                  {i === 1 && <Zap size={18} className="text-accent" />}
-                  {i === 2 && <Layers size={18} className="text-accent" />}
-                  {i === 3 && <Layout size={18} className="text-accent" />}
-                </div>
-                <div>
-                  <h3 className="font-orbitron text-xs font-bold text-white mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground text-[10px] uppercase tracking-widest">{item.desc}</p>
-                </div>
-              </div>
-            ))}
+              { title: "Startups", desc: "Building high-performance MVPs", icon: Rocket, angle: -90 },
+              { title: "Businesses", desc: "Needing smart automation", icon: Zap, angle: 0 },
+              { title: "Founders", desc: "Scaling digital systems", icon: Layers, angle: 90 },
+              { title: "Personal Brands", desc: "Portfolios & branding", icon: Layout, angle: 180 }
+            ].map((item, i) => {
+              const radius = typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 220;
+              const x = Math.cos((item.angle * Math.PI) / 180) * radius;
+              const y = Math.sin((item.angle * Math.PI) / 180) * radius;
+
+              return (
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, scale: 0.8, x: 0, y: 0 }}
+                  whileInView={{ opacity: 1, scale: 1, x, y }}
+                  transition={{ duration: 0.8, delay: i * 0.2, ease: "easeOut" }}
+                  viewport={viewportConfig}
+                  className="absolute p-6 bg-card/20 border border-white/5 hover:border-accent/20 transition-all flex flex-col items-center text-center gap-3 backdrop-blur-md w-48 md:w-56 group"
+                >
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+                    whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 200, damping: 15, delay: i * 0.2 + 0.3 }}
+                    className="w-10 h-10 bg-background border border-accent/20 flex items-center justify-center rounded-lg group-hover:border-accent/50 transition-colors"
+                  >
+                    <item.icon size={18} className="text-accent" />
+                  </motion.div>
+                  <div>
+                    <h3 className="font-orbitron text-xs font-bold text-white mb-2 group-hover:text-accent transition-colors">{item.title}</h3>
+                    <p className="text-muted-foreground text-[10px] uppercase tracking-widest leading-tight">{item.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -241,10 +384,16 @@ export default function Home() {
       {/* 5.3 Tech Stack Preview */}
       <section className="relative z-20 py-24 px-6 bg-accent/5 border-y border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="mb-12"
+          >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM STACK</span>
-            <h2 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-white-slate-400 tracking-widest uppercase">TECH <span className="text-accent">ENVIRONMENT</span></h2>
-          </div>
+            <h2 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-slate-400 tracking-widest uppercase">TECH <span className="text-accent">ENVIRONMENT</span></h2>
+          </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {[
               { label: "Frontend", val: "React / Next.js", icon: Layout },
@@ -253,15 +402,27 @@ export default function Home() {
               { label: "Cloud", val: "AWS", icon: Server },
               { label: "Database", val: "MongoDB / PostgreSQL", icon: Database }
             ].map((item, i) => (
-              <div key={i} className="p-6 bg-background/50 border border-white/10 rounded-xl backdrop-blur-sm group hover:border-accent/30 transition-all">
-                <div className="flex items-center gap-3 mb-4 text-accent">
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: i * 0.12, ease: "easeOut" }}
+                viewport={viewportConfig}
+                className="relative p-6 bg-background/50 border border-white/10 rounded-xl backdrop-blur-sm group hover:border-accent/30 transition-all overflow-hidden"
+              >
+                {/* Hover Image Layer */}
+                <div className="absolute inset-0 opacity-20 group-hover:opacity-50 transition-all duration-500 scale-110 group-hover:scale-100 pointer-events-none">
+                  <img src="/demo-tech.webp" alt="" className="w-full h-full object-cover" />
+                </div>
+
+                <div className="relative z-10 flex items-center gap-3 mb-4 text-accent">
                   <item.icon size={14} />
                   <span className="text-[10px] font-orbitron uppercase tracking-widest">{item.label}</span>
                 </div>
-                <div className="text-white font-mono text-xs opacity-70 group-hover:opacity-100 transition-opacity">
+                <div className="relative z-10 text-white font-mono text-xs opacity-70 group-hover:opacity-100 transition-opacity">
                   {item.val}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -270,130 +431,73 @@ export default function Home() {
       {/* 5.4 Live Signal */}
       <section className="relative z-20 py-32 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="mb-16"
+          >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// LIVE SIGNAL</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5 font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               ACTIVITY <span className="text-accent">FEED</span>
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="space-y-4 max-w-2xl">
-            {[
-              { text: "Automation workflow deployed", time: "2d ago" },
-              { text: "Client system updated", time: "5d ago" },
-              { text: "API integration completed", time: "1w ago" }
-            ].map((item, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="flex items-center justify-between p-4 bg-card/20 border-l-2 border-accent/30 hover:bg-card/30 transition-all"
-              >
-                <div className="flex items-center gap-4">
-                   <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div>
-                     <span className="text-white font-sans text-sm tracking-wide">{item.text}</span>
-                </div>
-                <span className="text-muted-foreground text-[10px] font-mono">{item.time}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5.5 Operation Limit */}
-      <div className="relative z-20 w-full bg-accent/10 border-y border-accent/20 py-6">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-center gap-8">
-           <div className="flex items-center gap-3">
-              <span className="text-accent font-orbitron text-xs font-bold tracking-[0.3em] uppercase">// OPERATION LIMIT</span>
-              <div className="h-[1px] w-12 bg-accent/30"></div>
-           </div>
-           <p className="text-white/80 font-sans text-sm tracking-wide">
-             Currently handling <span className="text-accent font-bold">10–12 active systems</span>. New project slots open selectively.
-           </p>
-        </div>
-      </div>
-
-      {/* 5.6 Mini Product Teaser */}
-      <section className="relative z-20 py-32 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-            <div>
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// INTERNAL SYSTEMS</span>
-              <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
-                SYSTEM <span className="text-accent">PREVIEW</span>
-              </h2>
+          <div className="flex flex-col md:flex-row gap-12">
+            <div className="w-full md:w-1/2 space-y-4">
+              {[
+                { text: "Automation workflow deployed", time: "2d ago", img: "/demo-activity-1.png" },
+                { text: "Client system updated", time: "5d ago", img: "/demo-activity-2.webp" },
+                { text: "API integration completed", time: "1w ago", img: "/demo-activity-3.png" }
+              ].map((item, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, x: -40, filter: "blur(5px)" }}
+                  whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                  transition={{ duration: 0.7, delay: i * 0.15, ease: "easeOut" }}
+                  viewport={viewportConfig}
+                  onMouseEnter={() => setActiveActivityImage(item.img)}
+                  className="flex items-center justify-between p-4 bg-card/20 border-l-2 border-accent/30 hover:border-accent hover:bg-card/40 transition-all cursor-crosshair group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div>
+                    <span className="text-white font-sans text-sm tracking-wide group-hover:text-accent transition-colors">{item.text}</span>
+                  </div>
+                  <span className="text-muted-foreground text-[10px] font-mono">{item.time}</span>
+                </motion.div>
+              ))}
             </div>
-            <Link 
-              href="/products"
-              className="group flex items-center gap-3 text-accent text-xs font-orbitron font-bold tracking-widest uppercase hover:text-white transition-colors"
+
+            {/* Preview Panel */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={viewportConfig}
+              className="hidden md:block w-1/2 relative group"
             >
-              VIEW ALL SYSTEMS <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { name: "Titan Analytics", status: "In Development", val: "DEV" },
-              { name: "Fortress UI", status: "Available", val: "LIVE" },
-              { name: "Bharat Cloud", status: "Beta", val: "BETA" }
-            ].map((item, i) => (
-              <div key={i} className="group p-8 bg-card/20 border border-white/5 hover:border-accent/20 transition-all">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="text-[10px] font-orbitron text-accent">{item.val}</div>
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_0_10px_var(--accent)]"></div>
+              <div className="absolute inset-0 bg-accent/20 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="relative h-full min-h-[300px] border border-white/5 rounded-lg overflow-hidden bg-card/20 backdrop-blur-sm">
+                <motion.img 
+                  key={activeActivityImage}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 0.6, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  src={activeActivityImage} 
+                  alt="Activity Preview"
+                  className="w-full h-full object-cover" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-accent animate-ping"></div>
+                  <span className="text-[10px] font-orbitron text-accent tracking-[0.2em]">LIVE_PREVIEW_ACTIVE</span>
                 </div>
-                <h3 className="font-orbitron text-lg font-bold text-white mb-2 group-hover:text-accent transition-colors">{item.name}</h3>
-                <p className="text-muted-foreground text-[10px] uppercase tracking-widest">{item.status}</p>
               </div>
-            ))}
+            </motion.div>
           </div>
         </div>
       </section>
-
-      {/* 5.7 Quick FAQ */}
-      <section className="relative z-20 py-32 px-6 border-t border-white/5 bg-background/30">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// QUICK ANSWERS</span>
-            <h2 className="font-orbitron text-3xl font-bold text-slate-800 dark:text-slate-400 tracking-widest uppercase">FAQ</h2>
-          </div>
-
-          <div className="space-y-6">
-            {[
-              { q: "Do you build custom systems?", a: "Yes, based on specific requirements." },
-              { q: "Do you offer automation?", a: "Yes, including workflow and API automation." },
-              { q: "How to start?", a: "Use the contact section to initiate." }
-            ].map((item, i) => (
-              <div key={i} className="p-6 bg-card/10 border border-white/5 hover:border-white/10 transition-all group">
-                <div className="flex items-start gap-4 mb-4">
-                  <HelpCircle size={18} className="text-accent mt-1 shrink-0" />
-                  <h4 className="text-white font-orbitron text-sm font-bold tracking-wide uppercase">{item.q}</h4>
-                </div>
-                <p className="text-muted-foreground text-sm font-sans pl-8 leading-relaxed">
-                  {item.a}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 5.8 Final Micro CTA */}
-      <div className="relative z-20 py-12 px-6 border-t border-white/5 bg-background">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8">
-           <div className="text-[10px] font-mono text-accent/60 uppercase tracking-widest">
-              &gt; system ready for deployment
-           </div>
-           <Link 
-              href="/contact"
-              className="px-8 py-3 bg-accent/10 border border-accent/40 text-white font-orbitron font-bold text-xs tracking-widest uppercase hover:bg-accent hover:shadow-[0_0_20px_rgba(var(--accent),0.4)] transition-all"
-           >
-              START PROJECT
-           </Link>
-        </div>
-      </div>
 
       {/* 6. Field Metrics */}
       <section className="relative z-20 py-24 border-y border-white/5 bg-accent/5">
@@ -405,14 +509,33 @@ export default function Home() {
               { label: "12", text: "Ongoing Builds" },
               { label: "96%", text: "Delivery Consistency" }
             ].map((stat, i) => (
-              <div key={i} className="space-y-2">
-                <div className="font-orbitron text-4xl md:text-6xl font-black text-white drop-shadow-[0_0_15px_rgba(var(--accent),0.3)]">
-                  {stat.label}
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: i * 0.1, ease: "easeOut" }}
+                viewport={viewportConfig}
+                className="space-y-2"
+              >
+                <div className="font-orbitron text-4xl md:text-6xl font-black text-white">
+                  <motion.div
+                    whileInView={{ 
+                      textShadow: [
+                        "0 0 0px rgba(255,59,0,0)",
+                        "0 0 20px rgba(255,59,0,0.5)",
+                        "0 0 0px rgba(255,59,0,0)"
+                      ]
+                    }}
+                    transition={{ delay: 1, duration: 1.5, ease: "easeInOut" }}
+                    viewport={viewportConfig}
+                  >
+                    <CountingNumber value={stat.label} />
+                  </motion.div>
                 </div>
                 <div className="text-muted-foreground text-xs font-bold tracking-widest uppercase font-sans">
                   {stat.text}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -421,12 +544,18 @@ export default function Home() {
       {/* 7. Recent Deployments */}
       <section className="relative z-20 py-32 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="mb-16"
+          >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// LIVE DATA</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-white-slate-400 tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               RECENT <span className="text-accent">DEPLOYMENTS</span>
             </h2>
-          </div>
+          </motion.div>
 
           <div className="flex gap-6 overflow-x-auto pb-8 no-scrollbar scroll-smooth snap-x">
             {[
@@ -435,8 +564,12 @@ export default function Home() {
               { title: "Automation Suite", desc: "Reduced manual workload by ~40%" },
               { title: "Portfolio Platform", desc: "High-performance personal branding system" }
             ].map((item, i) => (
-              <div 
+              <motion.div 
                 key={i}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                viewport={viewportConfig}
                 className="min-w-[300px] md:min-w-[400px] snap-center group p-8 bg-card/40 border border-white/5 hover:border-accent/20 transition-all duration-500 hover:-translate-y-2"
               >
                 <div className="mb-4 text-[10px] font-orbitron text-muted-foreground uppercase tracking-widest flex items-center gap-2">
@@ -445,7 +578,7 @@ export default function Home() {
                 <h3 className="font-orbitron text-xl font-bold text-white mb-3 group-hover:text-accent transition-colors">{item.title}</h3>
                 <p className="text-muted-foreground text-sm font-sans mb-6 leading-relaxed">{item.desc}</p>
                 <div className="h-[1px] w-full bg-gradient-to-r from-accent/50 to-transparent"></div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -454,46 +587,74 @@ export default function Home() {
       {/* 8. Workflow / Process */}
       <section className="relative z-20 py-32 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <div className="mb-20">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="mb-20"
+          >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM FLOW</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               OUR <span className="text-accent">WORKFLOW</span>
             </h2>
-          </div>
+          </motion.div>
 
-          <div className="relative flex flex-col md:flex-row items-center justify-between gap-12 md:gap-4">
-            {/* Connecting Line (Desktop) */}
-            <div className="hidden md:block absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent/30 to-transparent -translate-y-1/2 z-0"></div>
-            
-            {[
-              { step: "01", title: "ANALYZE" },
-              { step: "02", title: "ARCHITECT" },
-              { step: "03", title: "BUILD" },
-              { step: "04", title: "DEPLOY" }
-            ].map((item, i) => (
-              <div key={i} className="relative z-10 group">
-                <div 
-                  className="w-24 h-24 flex flex-col items-center justify-center bg-background border border-accent/30 group-hover:border-accent transition-all duration-500 shadow-lg group-hover:shadow-accent/20"
-                  style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
-                >
-                  <span className="text-[10px] font-orbitron text-accent mb-1">{item.step}</span>
-                  <span className="font-orbitron text-xs font-bold text-white tracking-widest">{item.title}</span>
+          <div className="relative overflow-hidden">
+            {/* Continuous Motion Container */}
+            <div className="flex animate-scroll-flow whitespace-nowrap py-10">
+              {[...Array(2)].map((_, listIndex) => (
+                <div key={listIndex} className="flex gap-8 px-4">
+                  {[
+                    { step: "01", title: "ANALYZE" },
+                    { step: "02", title: "ARCHITECT" },
+                    { step: "03", title: "BUILD" },
+                    { step: "04", title: "DEPLOY" }
+                  ].map((item, i) => (
+                    <div 
+                      key={`${listIndex}-${i}`} 
+                      className="relative z-10 group"
+                    >
+                      <div 
+                        className="w-32 h-32 md:w-40 md:h-40 flex flex-col items-center justify-center bg-background border border-accent/30 group-hover:border-accent transition-all duration-500 shadow-lg group-hover:shadow-accent/40 group-hover:scale-110 group-hover:z-20 group-hover:-translate-y-2 backdrop-blur-md"
+                        style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
+                      >
+                        <span className="text-[10px] md:text-xs font-orbitron text-accent mb-2">{item.step}</span>
+                        <span className="font-orbitron text-xs md:text-sm font-bold text-white tracking-[0.2em] group-hover:text-white transition-colors">{item.title}</span>
+                        <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </div>
+                      
+                      {/* Connecting Line (Part of the item to maintain flow) */}
+                      <div className="absolute top-1/2 -right-8 w-8 h-[1px] bg-gradient-to-r from-accent/30 to-accent/30 hidden md:block"></div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* 9. Trust Signal Section */}
-      <section className="relative z-20 py-24 px-6 border-t border-white/5 bg-background/30 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-          <div className="md:max-w-md text-center md:text-left">
-             <h3 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-white-slate-400 mb-6 uppercase tracking-[0.2em]">WHY <span className="text-accent">TRUST</span> US?</h3>
+      <section className="relative z-20 py-24 px-6 border-t border-white/5 bg-background/30 backdrop-blur-sm overflow-hidden">
+        {/* Verification Badge Background */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
+          <img src="/verification-badge.png" alt="" className="w-54 h-54 md:w-76 md:h-76 blur-[.5rem]" />
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={viewportConfig}
+            className="md:max-w-md text-center md:text-left"
+          >
+             <h3 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-slate-400 mb-6 uppercase tracking-[0.2em]">WHY <span className="text-accent">TRUST</span> US?</h3>
              <p className="text-muted-foreground text-sm font-sans leading-relaxed tracking-wide">
                 We prioritize technical excellence and transparent communication for every deployment.
              </p>
-          </div>
+          </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-full md:w-auto">
             {[
               "Projects delivered across 4+ domains",
@@ -501,10 +662,17 @@ export default function Home() {
               "Clean code + long-term maintainability focus",
               "Transparent communication cycles"
             ].map((text, i) => (
-              <div key={i} className="flex items-start gap-4 text-muted-foreground text-sm font-sans">
+              <motion.div 
+                key={i} 
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.15, ease: "easeOut" }}
+                viewport={viewportConfig}
+                className="flex items-start gap-4 text-steel-blade text-sm font-sans dark:text-slate-400"
+              >
                 <CheckCircle2 size={18} className="text-accent shrink-0 mt-0.5" />
                 <span className="tracking-wide">{text}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -513,21 +681,47 @@ export default function Home() {
       {/* 10. Final CTA Section */}
       <section className="relative z-20 py-32 px-6">
         <div className="max-w-5xl mx-auto">
-          <div 
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            viewport={viewportConfig}
             className="relative overflow-hidden bg-accent p-12 md:p-20 shadow-2xl shadow-accent/40 text-center"
             style={{ clipPath: 'polygon(5% 0, 100% 0, 100% 85%, 95% 100%, 0 100%, 0 15%)' }}
           >
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_70%)]"></div>
+            <motion.div 
+              animate={{ opacity: [0.1, 0.2, 0.1] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15)_0%,transparent_70%)]"
+            />
             
             <div className="relative z-10">
-              <h2 className="font-orbitron text-3xl md:text-5xl font-black text-white mb-6 tracking-tighter uppercase leading-none">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                viewport={viewportConfig}
+                className="font-orbitron text-3xl md:text-5xl font-black text-white mb-6 tracking-tighter uppercase leading-none"
+              >
                 READY TO BUILD SOMETHING ELITE?
-              </h2>
-              <p className="text-white/90 text-lg md:text-xl font-sans mb-12 max-w-2xl mx-auto tracking-wide">
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+                viewport={viewportConfig}
+                className="text-white/90 text-lg md:text-xl font-sans mb-12 max-w-2xl mx-auto tracking-wide"
+              >
                 Let’s engineer your next system.
-              </p>
+              </motion.p>
               
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                viewport={viewportConfig}
+                className="flex flex-col sm:flex-row items-center justify-center gap-6"
+              >
                 <Link 
                   href="/contact"
                   className="w-full sm:w-auto px-10 py-5 bg-accent text-grey-foreground font-orbitron font-bold tracking-[0.2em] uppercase hover:bg-accent/90 transition-all duration-300 shadow-xl dark:bg-white dark:text-accent dark:hover:bg-white/90"
@@ -540,9 +734,9 @@ export default function Home() {
                 >
                   VIEW SERVICES
                 </Link>
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
     </div>
