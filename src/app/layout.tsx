@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Chatbot } from "@/components/Chatbot";
+import { InitialLoaderWrapper } from "@/components/InitialLoaderWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,12 +50,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${orbitron.variable} antialiased bg-background text-foreground font-sans`}
       >
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
-        <Chatbot />
+        <InitialLoaderWrapper>
+          <Navbar />
+          <main className="min-h-screen">
+            {children}
+          </main>
+          <Footer />
+          <Chatbot />
+        </InitialLoaderWrapper>
       </body>
     </html>
   );

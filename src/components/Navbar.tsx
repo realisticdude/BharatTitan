@@ -162,7 +162,7 @@ export const Navbar = () => {
             {/* ✅ REAL LOGO */}
             <div className="relative z-10 w-10 h-10 transition-transform duration-300 group-active:scale-95">
               <Image
-                src="/company-logo.jpg"
+                src="/company-logo-header.jpg"
                 alt="Bharat Titan Logo"
                 width={40}
                 height={40}

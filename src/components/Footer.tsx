@@ -26,7 +26,7 @@ export const Footer = () => {
           <div className="flex items-center gap-2">
              <div className="relative w-8 h-8">
                 <Image
-                  src="/company-logo.jpg"
+                  src="/company-logo-header.jpg"
                   alt="Bharat Titan Logo"
                   width={32}
                   height={32}
