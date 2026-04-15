@@ -41,9 +41,26 @@ export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pathname = usePathname();
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light';
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.className = savedTheme;
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    document.documentElement.className = newTheme;
+    localStorage.setItem('theme', newTheme);
+  };
 
   const toggleMusic = () => {
     if (audioRef.current) {
@@ -129,34 +146,36 @@ export const Navbar = () => {
 
         <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
           {/* Logo Section */}
-          <Link 
-  href="/"
-  className="flex items-center gap-3 cursor-pointer group relative" 
->
-  {/* Glowing Backdrop */}
-  <div className="absolute -inset-4 bg-accent/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-  
-  {/* ✅ REAL LOGO */}
-  <div className="relative z-10 w-10 h-10">
-    <Image
-      src="/company-logo.jpg"
-      alt="Bharat Titan Logo"
-      width={40}
-      height={40}
-      className="rounded-md object-contain shadow-[0_0_10px_var(--accent)]"
-    />
-  </div>
-  
-  {/* Text */}
-  <div className="flex flex-col relative z-10">
-    <span className="font-orbitron font-bold text-xl tracking-wider text-foreground leading-none">
-      BHARAT<span className="text-accent">TITAN</span>
-    </span>
-    <span className="text-[10px] text-muted-foreground tracking-[0.2em] font-sans">
-      ELITE SYSTEMS
-    </span>
-  </div>
-</Link>
+          <div 
+            onClick={toggleTheme}
+            className="flex items-center gap-3 cursor-pointer group relative" 
+          >
+            {/* Glowing Backdrop */}
+            <div className="absolute -inset-4 bg-accent/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            {/* ✅ REAL LOGO */}
+            <div className="relative z-10 w-10 h-10 transition-transform duration-300 group-active:scale-95">
+              <Image
+                src="/company-logo.jpg"
+                alt="Bharat Titan Logo"
+                width={40}
+                height={40}
+                className={`rounded-md object-contain transition-all duration-300 ${
+                  theme === 'dark' ? 'shadow-[0_0_10px_var(--accent)]' : 'shadow-lg'
+                }`}
+              />
+            </div>
+            
+            {/* Text */}
+            <div className="flex flex-col relative z-10">
+              <span className="font-orbitron font-bold text-xl tracking-wider text-foreground leading-none">
+                BHARAT<span className="text-accent">TITAN</span>
+              </span>
+              <span className="text-[10px] text-muted-foreground tracking-[0.2em] font-sans">
+                ELITE SYSTEMS
+              </span>
+            </div>
+          </div>
 
           {/* Center Dynamic Wave (Lion Roar Visualization) */}
           <div className="hidden lg:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">

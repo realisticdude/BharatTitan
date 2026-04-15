@@ -3,6 +3,7 @@ import { Inter, Orbitron } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Chatbot } from "@/components/Chatbot";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  if (!theme && supportDarkMode) theme = 'dark';
+                  if (!theme) theme = 'dark';
+                  document.documentElement.className = theme;
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${orbitron.variable} antialiased bg-background text-foreground font-sans`}
       >
@@ -36,6 +54,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <Chatbot />
       </body>
     </html>
   );

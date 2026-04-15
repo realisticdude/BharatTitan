@@ -1,13 +1,23 @@
 import React from 'react';
-import { Twitter, Linkedin, Instagram, Github } from 'lucide-react';
+import {Twitter, X, Linkedin, Instagram , Youtube, } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export const Footer = () => {
   return (
     <footer className="bg-background/80 backdrop-blur-md border-t border-white/5 py-12 relative overflow-hidden">
+      {/* Animated Background Image */}
+      <div 
+        className="absolute inset-0 z-0 opacity-80 animate-bg-pan pointer-events-none"
+        style={{
+          backgroundImage: 'url(/footer-bg.png)',
+          backgroundSize: '200% 100%',
+          backgroundRepeat: 'repeat-x',
+        }}
+      ></div>
+
       {/* Footer Top Gradient Line */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-50"></div>
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-50 z-10"></div>
       
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
         
@@ -63,24 +73,34 @@ export const Footer = () => {
 
         {/* Social */}
         <div>
-          <h4 className="font-orbitron text-foreground font-bold tracking-widest mb-6">CONNECT</h4>
-          <div className="flex gap-4">
-            {[Twitter, Linkedin, Instagram, Github].map((Icon, i) => (
-              <a 
-                key={i} 
-                href="#" 
-                className="w-10 h-10 rounded-lg bg-card/50 flex items-center justify-center text-muted-foreground hover:text-white hover:bg-accent hover:shadow-[0_0_15px_rgba(var(--accent),0.5)] transition-all duration-300"
-              >
-                <Icon size={18} />
-              </a>
-            ))}
-          </div>
-        </div>
+  <h4 className="font-orbitron text-foreground font-bold tracking-widest mb-6">
+    CONNECT
+  </h4>
+
+  <div className="flex gap-4">
+    {[
+      { Icon: X, url: "https://x.com/BharatTitan" },
+      { Icon: Linkedin, url: "https://www.linkedin.com/company/bharattitan" },
+      { Icon: Instagram, url: "https://instagram.com/bharattitanofficial" },
+      { Icon: Youtube, url: "https://www.youtube.com/@BharatTitanOfficial" },
+    ].map(({ Icon, url }, i) => (
+      <a
+        key={i}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-10 h-10 rounded-lg bg-card/50 flex items-center justify-center text-muted-foreground hover:text-white hover:bg-accent hover:shadow-[0_0_15px_rgba(var(--accent),0.5)] transition-all duration-300 hover:scale-110"
+      >
+        <Icon size={18} />
+      </a>
+    ))}
+  </div>
+</div>
 
       </div>
       
       <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-xs text-muted-foreground font-sans">
-        <p>&copy; {new Date().getFullYear()} BharatTitan. All rights reserved.</p>
+        <p suppressHydrationWarning>&copy; {new Date().getFullYear()} BharatTitan. All rights reserved.</p>
         <p>Designed for the Elite.</p>
       </div>
     </footer>

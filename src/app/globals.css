@@ -82,6 +82,47 @@
   --chart-5: oklch(0.645 0.246 16.439);
 }
 
+.light {
+  --background: #F5F7FA;
+  --foreground: #0A0D12;
+  --card: #FFFFFF;
+  --card-foreground: #0A0D12;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A0D12;
+  --primary: #0A0D12;
+  --primary-foreground: #F5F7FA;
+  --secondary: #E2E8F0;
+  --secondary-foreground: #0A0D12;
+  --muted: #F1F5F9;
+  --muted-foreground: #5C6672;
+  --accent: #FF3B00;
+  --accent-foreground: #FFFFFF;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #FF3B00;
+}
+
+/* Global Transition */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Light Mode Shadow Overrides */
+.light .shadow-accent\/20,
+.light .shadow-accent\/30,
+.light .shadow-accent\/40,
+.light .shadow-accent\/50,
+.light .shadow-accent\/60,
+.light .shadow-\[0_0_10px_var\(--accent\)\] {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+}
+
+.light .drop-shadow-\[0_0_10px_var\(--accent\)\],
+.light .drop-shadow-\[0_0_15px_var\(--accent\)\],
+.light .drop-shadow-\[0_0_15px_rgba\(var\(--accent\)\,0\.3\)\] {
+  filter: none !important;
+}
+
 /* Add custom styles from index.css */
 @layer utilities {
   .clip-path-slant {
@@ -91,11 +132,20 @@
   .animate-slide-right {
     animation: slide-right 3s linear infinite;
   }
+  
+  .animate-bg-pan {
+    animation: bg-pan 20s linear infinite alternate;
+  }
 }
 
 @keyframes slide-right {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+
+@keyframes bg-pan {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 /* Scrollbar (Dotted Energy Style) */
