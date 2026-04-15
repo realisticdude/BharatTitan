@@ -10,94 +10,97 @@ export default function Home() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
       
-      {/* 1. Canvas Data Stream Background - Hidden in Light Mode for clarity */}
-      <div className="dark:block hidden">
-        <DataStreamBackground />
-      </div>
+      {/* Hero Section Container */}
+      <section className="relative min-h-[90vh] overflow-hidden">
+        {/* 1. Canvas Data Stream Background - Now restricted to Hero Section */}
+        <div className="dark:block hidden absolute inset-0 z-0 pointer-events-none">
+          <DataStreamBackground />
+        </div>
 
-      {/* 2. Hero Image Integration (Blended) */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-90 dark:opacity-60 transition-opacity">
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10"></div>
-        <img 
-            src="/hero-wolf.png" 
-            alt="Futuristic Wolf Pack" 
-            className="w-full h-full object-cover object-center mix-blend-normal dark:mix-blend-lighten opacity-50 dark:opacity-100"
-        />
-        {/* Color Overlay - Dark Mode Only */}
-        <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10 hidden dark:block"></div>
-      </div>
+        {/* 2. Hero Image Integration (Blended) */}
+        <div className="absolute inset-0 z-0 flex items-center justify-center opacity-90 dark:opacity-60 transition-opacity">
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10"></div>
+          <img 
+              src="/hero-wolf.png" 
+              alt="Futuristic Wolf Pack" 
+              className="w-full h-full object-cover object-center mix-blend-normal dark:mix-blend-lighten opacity-50 dark:opacity-100"
+          />
+          {/* Color Overlay - Dark Mode Only */}
+          <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10 hidden dark:block"></div>
+        </div>
 
-      {/* 3. Content Layer */}
-      <div className="relative z-20 min-h-[90vh] flex flex-col items-center justify-center px-6 text-center pt-24 pb-12">
-        
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-8 inline-flex items-center gap-3 px-5 py-2 rounded-full border border-accent/30 bg-background/80 backdrop-blur-xl shadow-lg shadow-accent/20"
-        >
-          <Zap size={14} className="text-accent fill-accent animate-pulse" />
-          <span className="text-white text-xs font-orbitron tracking-[0.3em] uppercase">
-            System Overdrive Active
-          </span>
-        </motion.div>
-
-        {/* Main Heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black text-foreground leading-[0.9] mb-8 tracking-tighter"
-        >
-          <span className="block text-foreground dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-b dark:from-white dark:to-white/50">LEAD THE</span>
-          <span className="relative inline-block">
-             <span className="relative z-10 text-accent dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-accent dark:via-accent/80 dark:to-accent/60">PACK</span>
-             {/* Text Glow - Dark Mode Only */}
-             <span className="absolute inset-0 text-accent opacity-50 blur-lg z-0 hidden dark:block">PACK</span>
-          </span>
-        </motion.h1>
-
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="text-muted-foreground text-lg md:text-2xl max-w-2xl mb-12 font-sans tracking-wide"
-        >
-          We engineer elite digital systems that redefine performance. 
-          BharatTitan is the force behind India's next-gen innovation.
-        </motion.p>
-
-        {/* Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg"
-        >
-          <Link 
-            href="/contact"
-            className="group relative w-full sm:w-auto px-8 py-5 bg-accent text-white font-orbitron font-bold tracking-widest uppercase overflow-hidden hover:bg-accent/90 transition-all duration-300 shadow-lg shadow-accent/40 hover:shadow-accent/60"
-            style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
+        {/* 3. Content Layer */}
+        <div className="relative z-20 flex flex-col items-center justify-center px-6 text-center pt-24 pb-12 min-h-[90vh]">
+          
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-8 inline-flex items-center gap-3 px-5 py-2 rounded-full border border-accent/30 bg-background/80 backdrop-blur-xl shadow-lg shadow-accent/20"
           >
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              JOIN THE HUNT <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <Zap size={14} className="text-accent fill-accent animate-pulse" />
+            <span className="text-white text-xs font-orbitron tracking-[0.3em] uppercase">
+              System Overdrive Active
             </span>
-          </Link>
+          </motion.div>
 
-          <Link 
-            href="/products"
-            className="group relative w-full sm:w-auto px-8 py-5 bg-transparent border border-white/20 text-white font-orbitron font-bold tracking-widest uppercase overflow-hidden hover:bg-white/5 transition-all duration-300 backdrop-blur-sm"
-            style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
+          {/* Main Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+            className="font-orbitron text-6xl md:text-8xl lg:text-9xl font-black leading-[0.9] mb-8 tracking-tighter"
           >
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              VIEW ARSENAL <Activity size={20} className="group-hover:text-accent transition-colors" />
+            <span className="block text-transparent bg-clip-text bg-gradient-to-b from-slate-400 via-slate-500 to-slate-400 dark:from-white dark:to-white/50">LEAD THE</span>
+            <span className="relative inline-block">
+               <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent/80 to-accent/60">PACK</span>
+               {/* Text Glow - Now subtle in light mode, stronger in dark */}
+               <span className="absolute inset-0 text-accent opacity-50 dark:opacity-50 blur-lg z-0">PACK</span>
             </span>
-          </Link>
-        </motion.div>
-      </div>
+          </motion.h1>
+
+          {/* Subheading */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+            className="text-slate-500 dark:text-muted-foreground text-lg md:text-2xl max-w-2xl mb-12 font-sans tracking-wide"
+          >
+            We engineer elite digital systems that redefine performance. 
+            BharatTitan is the force behind India's next-gen innovation.
+          </motion.p>
+
+          {/* Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg"
+          >
+            <Link 
+              href="/contact"
+              className="group relative w-full sm:w-auto px-8 py-5 bg-accent text-white font-orbitron font-bold tracking-widest uppercase overflow-hidden hover:bg-accent/90 transition-all duration-300 shadow-lg shadow-accent/40 hover:shadow-accent/60"
+              style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
+            >
+              <span className="relative z-10 flex items-center justify-center gap-3">
+                JOIN THE HUNT <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </span>
+            </Link>
+
+            <Link 
+              href="/products"
+              className="group relative w-full sm:w-auto px-8 py-5 bg-transparent border border-white/20 text-white font-orbitron font-bold tracking-widest uppercase overflow-hidden hover:bg-white/5 transition-all duration-300 backdrop-blur-sm"
+              style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
+            >
+              <span className="relative z-10 flex items-center justify-center gap-3">
+                VIEW ARSENAL <Activity size={20} className="group-hover:text-accent transition-colors" />
+              </span>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       {/* 4. System Status Strip */}
       <div className="relative z-20 w-full border-y border-white/5 bg-background/50 backdrop-blur-sm py-4">
@@ -107,12 +110,12 @@ export default function Home() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
             </span>
-            <span>SYSTEM STATUS: <span className="text-white">STABLE</span></span>
+            <span>SYSTEM STATUS: <span className="text-slate-900 dark:text-white">STABLE</span></span>
           </div>
-          <div>Latency: <span className="text-white">42ms</span></div>
-          <div>Deployments This Month: <span className="text-white">18</span></div>
-          <div>Active Nodes: <span className="text-white">63</span></div>
-          <div>Last Update: <span className="text-white">2h ago</span></div>
+          <div>Latency: <span className="text-slate-900 dark:text-white">42ms</span></div>
+          <div>Deployments This Month: <span className="text-slate-900 dark:text-white">18</span></div>
+          <div>Active Nodes: <span className="text-slate-900 dark:text-white">63</span></div>
+          <div>Last Update: <span className="text-slate-900 dark:text-white">2h ago</span></div>
         </div>
       </div>
 
@@ -121,7 +124,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// CORE MODULES</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               CORE <span className="text-accent">CAPABILITIES</span>
             </h2>
           </div>
@@ -162,7 +165,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// AUTOMATION CORE</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               AUTOMATION & <span className="text-accent">AI SYSTEMS</span>
             </h2>
           </div>
@@ -206,7 +209,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// CLIENT TARGETING</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               WHO WE <span className="text-accent">BUILD FOR</span>
             </h2>
           </div>
@@ -240,7 +243,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM STACK</span>
-            <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase">TECH <span className="text-accent">ENVIRONMENT</span></h2>
+            <h2 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-white-slate-400 tracking-widest uppercase">TECH <span className="text-accent">ENVIRONMENT</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {[
@@ -269,7 +272,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// LIVE SIGNAL</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               ACTIVITY <span className="text-accent">FEED</span>
             </h2>
           </div>
@@ -290,7 +293,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-4">
                    <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div>
-                   <span className="text-white font-sans text-sm tracking-wide">{item.text}</span>
+                     <span className="text-white font-sans text-sm tracking-wide">{item.text}</span>
                 </div>
                 <span className="text-muted-foreground text-[10px] font-mono">{item.time}</span>
               </motion.div>
@@ -318,7 +321,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
               <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// INTERNAL SYSTEMS</span>
-              <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase">
+              <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
                 SYSTEM <span className="text-accent">PREVIEW</span>
               </h2>
             </div>
@@ -354,7 +357,7 @@ export default function Home() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// QUICK ANSWERS</span>
-            <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">FAQ</h2>
+            <h2 className="font-orbitron text-3xl font-bold text-slate-800 dark:text-slate-400 tracking-widest uppercase">FAQ</h2>
           </div>
 
           <div className="space-y-6">
@@ -420,7 +423,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// LIVE DATA</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-white-slate-400 tracking-tighter uppercase">
               RECENT <span className="text-accent">DEPLOYMENTS</span>
             </h2>
           </div>
@@ -453,7 +456,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto text-center">
           <div className="mb-20">
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM FLOW</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               OUR <span className="text-accent">WORKFLOW</span>
             </h2>
           </div>
@@ -486,7 +489,7 @@ export default function Home() {
       <section className="relative z-20 py-24 px-6 border-t border-white/5 bg-background/30 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
           <div className="md:max-w-md text-center md:text-left">
-             <h3 className="font-orbitron text-2xl font-bold text-white mb-6 uppercase tracking-[0.2em]">WHY <span className="text-accent">TRUST</span> US?</h3>
+             <h3 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-white-slate-400 mb-6 uppercase tracking-[0.2em]">WHY <span className="text-accent">TRUST</span> US?</h3>
              <p className="text-muted-foreground text-sm font-sans leading-relaxed tracking-wide">
                 We prioritize technical excellence and transparent communication for every deployment.
              </p>
