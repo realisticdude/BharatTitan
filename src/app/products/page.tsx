@@ -15,7 +15,8 @@ export default function Products() {
       tag: "Enterprise Data",
       status: "Coming Soon",
       desc: "Lightweight analytics engine for tracking system performance and user behavior. Focused on clarity over complexity.",
-      color: "rgba(255, 80, 0, 0.1)"
+      color: "rgba(255, 80, 0, 0.1)",
+      image: "/titan-analytics.jpg"
     },
     {
       id: 2,
@@ -23,7 +24,8 @@ export default function Products() {
       tag: "Infrastructure",
       status: "Beta Access",
       desc: "Modular cloud infrastructure designed for small to mid-scale deployments with cost efficiency.",
-      color: "rgba(0, 120, 255, 0.1)"
+      color: "rgba(0, 120, 255, 0.1)",
+      image: "/bharat-cloud.png"
     },
     {
       id: 3,
@@ -31,15 +33,17 @@ export default function Products() {
       tag: "Design System",
       status: "Available",
       desc: "Reusable UI component system built for speed, consistency, and futuristic interfaces.",
-      color: "rgba(0, 255, 120, 0.1)"
+      color: "rgba(0, 255, 120, 0.1)",
+      image: "/fortress-ui.png"
     },
     {
       id: 4,
-      name: "NEXUS API",
+      name: "Titan Link",
       tag: "Connectivity",
       status: "Coming Soon",
       desc: "Unified API layer enabling seamless communication between services and external platforms.",
-      color: "rgba(255, 0, 120, 0.1)"
+      color: "rgba(255, 0, 120, 0.1)",
+      image: "/titan-link.png"
     }
   ];
 
@@ -49,8 +53,8 @@ export default function Products() {
   });
 
   const smoothScrollY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: 70,
+    damping: 40,
     restDelta: 0.001
   });
 
@@ -130,40 +134,58 @@ export default function Products() {
                 const start = index / products.length;
                 const end = (index + 1) / products.length;
                 
-                // Entrance animation
-                const yEntrance = useTransform(smoothScrollY, [start - 0.15, start], [600, 0]);
-                const opacityEntrance = useTransform(smoothScrollY, [start - 0.1, start], [0, 1]);
-                const scaleEntrance = useTransform(smoothScrollY, [start - 0.15, start], [0.9, 1]);
+                // Stable, Professional Transition Logic
+                // Card stays locked for most of its range, only transitions at the edges
+                const transitionDuration = 0.04; 
+
+                const yPos = useTransform(
+                  smoothScrollY, 
+                  [start - transitionDuration, start, end, end + transitionDuration], 
+                  [100, 0, 0, -100]
+                );
                 
-                // Exit animation (fade and blur for layering effect)
-                const opacityExit = useTransform(smoothScrollY, [end, end + 0.1], [1, 0]);
-                const blurExit = useTransform(smoothScrollY, [end, end + 0.1], ["blur(0px)", "blur(10px)"]);
-                const yExit = useTransform(smoothScrollY, [end, end + 0.15], [0, -200]);
+                const opacity = useTransform(
+                  smoothScrollY, 
+                  [start - transitionDuration, start, end, end + transitionDuration], 
+                  [0, 1, 1, 0]
+                );
+                
+                const scale = useTransform(
+                  smoothScrollY, 
+                  [start - transitionDuration, start, end, end + transitionDuration], 
+                  [0.99, 1, 1, 0.99]
+                );
+
+                const blur = useTransform(
+                  smoothScrollY, 
+                  [end, end + transitionDuration], 
+                  ["blur(0px)", "blur(12px)"]
+                );
 
                 return (
                   <motion.div
                     key={product.id}
                     style={{ 
-                      y: index === products.length - 1 ? yEntrance : useTransform(smoothScrollY, [start - 0.15, start, end, end + 0.15], [600, 0, 0, -200]),
-                      opacity: useTransform(smoothScrollY, [start - 0.1, start, end, end + 0.1], [0, 1, 1, 0]),
-                      scale: useTransform(smoothScrollY, [start - 0.15, start, end, end + 0.15], [0.9, 1, 1, 0.95]),
-                      filter: useTransform(smoothScrollY, [end, end + 0.1], ["blur(0px)", "blur(10px)"]),
+                      y: yPos,
+                      opacity: opacity,
+                      scale: scale,
+                      filter: blur,
                       zIndex: index,
                       backgroundColor: product.color
                     }}
-                    className="absolute inset-0 bg-card/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden flex items-center shadow-2xl"
+                    className="group absolute inset-0 bg-card/30 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden flex items-center shadow-[0_0_50px_rgba(0,0,0,0.5)]"
                   >
                     {/* Product Image Placeholder (Right Side) */}
-                    <div className="absolute right-0 w-1/2 h-full opacity-30 pointer-events-none">
-                      <img src="/product-demo.jpg" alt="" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-card/40"></div>
+                    <div className="absolute right-0 w-1/2 h-full opacity-60 pointer-events-none">
+                      <img src={product.image} alt="" className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-card/60"></div>
                     </div>
 
                     <div className="relative z-10 w-full md:w-1/2 p-12 md:p-20">
                       <motion.div
                         style={{ 
-                          x: useTransform(smoothScrollY, [start - 0.05, start], [-50, 0]),
-                          opacity: useTransform(smoothScrollY, [start - 0.05, start], [0, 1])
+                          x: useTransform(smoothScrollY, [start - transitionDuration, start], [-20, 0]),
+                          opacity: useTransform(smoothScrollY, [start - transitionDuration, start], [0, 1])
                         }}
                       >
                         <div className="inline-block px-4 py-1.5 bg-accent/10 border border-accent/30 text-accent text-xs font-bold tracking-[0.3em] uppercase rounded mb-8">
@@ -210,6 +232,12 @@ export default function Products() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group relative min-h-[320px] bg-card/40 backdrop-blur-md border border-white/5 overflow-hidden rounded-xl p-8"
             >
+              {/* Product Image Background (Mobile) */}
+              <div className="absolute right-0 top-0 w-1/2 h-full opacity-10 pointer-events-none">
+                <img src={product.image} alt="" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-card/40"></div>
+              </div>
+
               <div className="relative z-10">
                 <div className="inline-block px-3 py-1 bg-accent/10 border border-accent/30 text-accent text-[10px] font-bold tracking-widest uppercase rounded mb-4">
                   {product.tag}
