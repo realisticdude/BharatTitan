@@ -38,7 +38,7 @@ export const Footer = () => {
             </span>
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed font-sans">
-            Forging the future of Indian technology with elite digital solutions and premium innovation.
+            Forging the future of Indian technology with Precision. Power. Performance.
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export const Footer = () => {
               <Link href="/products" className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Products</Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Careers</Link>
+              <Link href="/contact" className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Contact us</Link>
             </li>
           </ul>
         </div>
@@ -65,9 +65,15 @@ export const Footer = () => {
         <div>
           <h4 className="font-orbitron text-foreground font-bold tracking-widest mb-6">LEGAL</h4>
           <ul className="space-y-3 text-sm text-muted-foreground font-sans">
-            <li className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Privacy Policy</li>
-            <li className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Terms of Service</li>
-            <li className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Cookie Policy</li>
+            <li>
+              <Link href="/privacy-policy" className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Privacy Policy</Link>
+            </li>
+            <li>
+              <Link href="/terms-of-service" className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Terms of Service</Link>
+            </li>
+            <li>
+              <Link href="/cookie-policy" className="hover:text-accent transition-colors cursor-pointer hover:translate-x-1 duration-300 inline-block">Cookie Policy</Link>
+            </li>
           </ul>
         </div>
 

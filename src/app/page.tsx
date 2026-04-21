@@ -2,9 +2,27 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform, useMotionValue } from 'framer-motion';
-import { ArrowRight, Activity, Zap, CheckCircle2, HelpCircle, Code, Server, Layers, Layout, Database, Rocket } from 'lucide-react';
+import { 
+  ArrowRight, 
+  Activity, 
+  Zap, 
+  CheckCircle2, 
+  HelpCircle, 
+  Code, 
+  Server, 
+  Layers, 
+  Layout, 
+  Database, 
+  Rocket,
+  Workflow,
+  Network,
+  Bot,
+  TrendingUp,
+  X
+} from 'lucide-react';
 import { DataStreamBackground } from '@/components/DataStreamBackground';
 import Link from 'next/link';
+import { AnimatePresence } from 'framer-motion';
 
 // Helper component for counting numbers using Framer Motion's useSpring for performance
 const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: number }) => {
@@ -39,10 +57,168 @@ const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: num
   );
 };
 
+// Modal Component for Automation Deep Dive
+const AutomationModal = ({ isOpen, onClose, data, theme }: { isOpen: boolean, onClose: () => void, data: any, theme: string }) => {
+  // Close on ESC
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
+
+  if (!data) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative w-full max-w-4xl bg-[#0B0F14] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+            style={{ backgroundColor: theme === 'light' ? '#F5F7FA' : '#0B0F14' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-white/5 dark:border-white/5 light:border-slate-200">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center">
+                  {data.icon}
+                </div>
+                <h2 className="font-orbitron text-xl font-bold tracking-tight uppercase text-white dark:text-white light:text-slate-900">
+                  {data.title}
+                </h2>
+              </div>
+              <button 
+                onClick={onClose}
+                className="p-2 hover:bg-white/5 dark:hover:bg-white/5 light:hover:bg-slate-200 rounded-full transition-colors text-slate-400"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 md:p-8 overflow-y-auto max-h-[80vh]">
+              <p className="text-slate-400 dark:text-slate-400 light:text-slate-600 text-sm md:text-base font-sans leading-relaxed mb-10 max-w-3xl">
+                {data.longDesc}
+              </p>
+
+              {/* Placeholder Grid */}
+              <div className="space-y-4">
+                {/* Large Top Block */}
+                <div className="relative aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
+                  <div className="absolute inset-0 bg-accent/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="relative z-10 flex flex-col items-center gap-4 text-slate-500 dark:text-slate-500 light:text-slate-400">
+                    <data.mainIcon size={48} className="opacity-20" />
+                    <span className="font-orbitron text-[10px] tracking-[0.4em] uppercase text-center">
+                      {data.placeholders[0]}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Smaller Bottom Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
+                    <div className="relative z-10 flex flex-col items-center gap-3 text-slate-500 dark:text-slate-500 light:text-slate-400 text-center px-4">
+                      <span className="font-orbitron text-[8px] tracking-[0.3em] uppercase">
+                        {data.placeholders[1]}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
+                    <div className="relative z-10 flex flex-col items-center gap-3 text-slate-500 dark:text-slate-500 light:text-slate-400 text-center px-4">
+                      <span className="font-orbitron text-[8px] tracking-[0.3em] uppercase">
+                        {data.placeholders[2]}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function Home() {
   const [isBooted, setIsBooted] = useState(false);
   const [activeActivityImage, setActiveActivityImage] = useState<string | null>(null);
+  const [activeActivityIndex, setActiveActivityIndex] = useState(0);
+  const [isHoveringActivity, setIsHoveringActivity] = useState(false);
+
+  const activityFeedItems = [
+    { text: "Automation workflow deployed", time: "2d ago", img: "/demo-activity-1.png" },
+    { text: "Client system updated", time: "5d ago", img: "/demo-activity-2.webp" },
+    { text: "API integration completed", time: "1w ago", img: "/demo-activity-3.webp" }
+  ];
+
+  // Auto-cycle Activity Feed
+  useEffect(() => {
+    if (isHoveringActivity) return;
+    
+    const interval = setInterval(() => {
+      setActiveActivityIndex((prev) => (prev + 1) % activityFeedItems.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isHoveringActivity, activityFeedItems.length]);
+
+  // Sync image with index when not hovering
+  useEffect(() => {
+    if (!isHoveringActivity) {
+      setActiveActivityImage(activityFeedItems[activeActivityIndex].img);
+    }
+  }, [activeActivityIndex, isHoveringActivity]);
   const [activeWhoIndex, setActiveWhoIndex] = useState(0);
+  const [activeModal, setActiveModal] = useState<number | null>(null);
+
+  // Modal Data
+  const automationDetails = [
+    { 
+      title: "Workflow Automation", 
+      desc: "n8n-based systems for seamless operations",
+      longDesc: "Revolutionize your operational efficiency with complex multi-step processes automated using n8n and our custom-built orchestration engines. We design resilient pipelines that handle repetitive tasks with 100% precision.",
+      icon: <Workflow className="text-accent" size={18} />,
+      mainIcon: Workflow,
+      placeholders: ["WORKFLOW DIAGRAM", "INTEGRATION FLOW", "AUTOMATION EXAMPLE"]
+    },
+    { 
+      title: "API Automation", 
+      desc: "API-triggered backend automation",
+      longDesc: "Build lightning-fast connectivity between your systems. Our API automation solutions ensure seamless data flow and real-time event handling, reducing latency and manual synchronization efforts.",
+      icon: <Network className="text-accent" size={18} />,
+      mainIcon: Network,
+      placeholders: ["API ARCHITECTURE", "API FLOW", "REQUEST / RESPONSE"]
+    },
+    { 
+      title: "AI Agents", 
+      desc: "Intelligent agents for complex task handling",
+      longDesc: "Deploy smart, context-aware AI agents that can reason through complex tasks. Our agents are designed to integrate into your existing workflows, providing intelligent decision-making and semi-autonomous execution.",
+      icon: <Bot className="text-accent" size={18} />,
+      mainIcon: Bot,
+      placeholders: ["AGENT ARCHITECTURE", "AGENT WORKFLOW", "USE CASE EXAMPLE"]
+    },
+    { 
+      title: "Process Optimization", 
+      desc: "Business process optimization strategies",
+      longDesc: "Transform your business bottlenecks into competitive advantages. We analyze your existing processes and implement data-driven optimization strategies that scale with your growth and reduce operational overhead.",
+      icon: <TrendingUp className="text-accent" size={18} />,
+      mainIcon: TrendingUp,
+      placeholders: ["PROCESS FLOW", "BEFORE / AFTER", "OPTIMIZATION RESULTS"]
+    }
+  ];
 
   useEffect(() => {
     // Auto-cycle "Who We Build For" highlights
@@ -104,7 +280,7 @@ export default function Home() {
           >
             <Zap size={14} className="text-accent fill-accent animate-pulse" />
             <span className="text-white text-xs font-orbitron tracking-[0.3em] uppercase">
-              System Overdrive Active
+              Titan Mode Active
             </span>
           </motion.div>
 
@@ -142,10 +318,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={isBooted ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-            className="text-slate-500 dark:text-muted-foreground text-lg md:text-2xl max-w-2xl mb-12 font-sans tracking-wide"
+            className="light:text-black dark:text-slate-400 text-lg md:text-2xl max-w-2xl mb-12 font-sans tracking-wide transition-colors duration-500"
           >
             We engineer elite digital systems that redefine performance. 
-            BharatTitan is the force behind India's next-gen innovation.
+            BharatTitan is the source behind India's next-gen innovation.
           </motion.p>
 
           {/* Action Buttons */}
@@ -183,20 +359,20 @@ export default function Home() {
         initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
         animate={isBooted ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
         transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
-        className="relative z-20 w-full border-y border-white/5 bg-background/50 backdrop-blur-sm py-4"
+        className="relative z-20 w-full border-y border-white/10 bg-black/90 backdrop-blur-sm py-4"
       >
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4 text-[10px] font-orbitron tracking-[0.2em] text-muted-foreground uppercase">
+        <div className="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4 text-[10px] font-orbitron tracking-[0.2em] text-slate-500 uppercase">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
             </span>
-            <span>SYSTEM STATUS: <span className="text-slate-900 dark:text-white">STABLE</span></span>
+            <span>SYSTEM STATUS: <span className="dark:text-white">STABLE</span></span>
           </div>
-          <div>Latency: <span className="text-slate-900 dark:text-white">42ms</span></div>
-          <div>Deployments This Month: <span className="text-slate-900 dark:text-white">18</span></div>
-          <div>Active Nodes: <span className="text-slate-900 dark:text-white">63</span></div>
-          <div>Last Update: <span className="text-slate-900 dark:text-white">2h ago</span></div>
+          <div>Latency: <span className="dark:text-white">42ms</span></div>
+          <div>Deployments This Month: <span className="dark:text-white">18</span></div>
+          <div>Active Nodes: <span className="dark:text-white">63</span></div>
+          <div>Last Update: <span className="dark:text-white">2h ago</span></div>
         </div>
       </motion.div>
 
@@ -218,30 +394,47 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { title: "ENGINEERING SYSTEMS", desc: "Building scalable backend and cloud-native apps" },
-              { title: "INTELLIGENT AUTOMATION", desc: "Reducing manual workflows with smart integrations" },
-              { title: "DATA STREAM PROCESSING", desc: "Handling real-time pipelines with optimized flow" },
-              { title: "INTERFACE DESIGN", desc: "Clean, high-performance UI with futuristic aesthetics" }
+              { 
+                title: "ENGINEERING SYSTEMS", 
+                desc: "Building scalable backend and cloud-native apps",
+                href: "/capabilities/engineering-systems"
+              },
+              { 
+                title: "INTELLIGENT AUTOMATION", 
+                desc: "Reducing manual workflows with smart integrations",
+                href: "/capabilities/intelligent-automation"
+              },
+              { 
+                title: "DATA STREAM PROCESSING", 
+                desc: "Handling real-time pipelines with optimized flow",
+                href: "/capabilities/data-stream-processing"
+              },
+              { 
+                title: "INTERFACE DESIGN", 
+                desc: "Clean, high-performance UI with futuristic aesthetics",
+                href: "/capabilities/interface-design"
+              }
             ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.95, y: 30 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
-                viewport={viewportConfig}
-                className="group relative p-8 bg-card/30 backdrop-blur-xl border border-white/5 hover:border-accent/30 transition-all duration-500 overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 blur-3xl group-hover:bg-accent/10 transition-colors"></div>
-                <h3 className="font-orbitron text-lg font-bold text-white mb-4 group-hover:text-accent transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed font-sans">
-                  {item.desc}
-                </p>
-                <div className="mt-6 text-[10px] font-orbitron text-accent opacity-0 group-hover:opacity-100 transition-opacity">
-                  &gt; INITIALIZING...
-                </div>
-              </motion.div>
+              <Link href={item.href} key={i}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 30 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
+                  viewport={viewportConfig}
+                  className="group relative p-8 bg-card/30 backdrop-blur-xl border border-white/5 hover:border-accent/30 transition-all duration-500 overflow-hidden h-full"
+                >
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-accent/5 blur-3xl group-hover:bg-accent/10 transition-colors"></div>
+                  <h3 className="font-orbitron text-lg font-bold text-white mb-4 group-hover:text-accent transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed font-sans">
+                    {item.desc}
+                  </p>
+                  <div className="mt-6 text-[10px] font-orbitron text-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                    &gt; Take a Glance...
+                  </div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>
@@ -271,44 +464,54 @@ export default function Home() {
             className="mb-16"
           >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// AUTOMATION CORE</span>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
+            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase mb-4">
               AUTOMATION & <span className="text-accent">AI SYSTEMS</span>
             </h2>
+            <p className="text-slate-500 text-[10px] font-orbitron tracking-widest uppercase animate-pulse">
+              👉 Click on any module to explore details
+            </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: "Workflow Automation", desc: "n8n-based systems for seamless operations" },
-              { title: "API Automation", desc: "API-triggered backend automation" },
-              { title: "AI Agents", desc: "Intelligent agents for complex task handling" },
-              { title: "Process Optimization", desc: "Business process optimization strategies" }
-            ].map((item, i) => (
+            {automationDetails.map((item, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, x: -30, filter: "blur(10px)" }}
                 whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                 transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
                 viewport={viewportConfig}
-                className="group relative p-8 bg-card/40 backdrop-blur-xl border border-white/5 hover:border-accent/30 transition-all duration-500"
+                onClick={() => setActiveModal(i)}
+                className="group relative p-8 bg-card/40 backdrop-blur-xl border border-white/5 hover:border-accent/30 transition-all duration-500 cursor-pointer shadow-sm hover:shadow-accent/5 light:bg-slate-50 light:border-slate-200"
               >
                 <div className="absolute top-0 right-0 w-20 h-20 bg-accent/5 blur-3xl group-hover:bg-accent/10 transition-colors"></div>
-                <h3 className="font-orbitron text-sm font-bold text-white mb-4 group-hover:text-accent transition-colors">
+                <div className="mb-4">
+                  {item.icon}
+                </div>
+                <h3 className="font-orbitron text-sm font-bold text-white dark:text-white light:text-slate-900 mb-4 group-hover:text-accent transition-colors">
                   {item.title}
                 </h3>
                 <p className="text-muted-foreground text-xs leading-relaxed font-sans mb-4">
                   {item.desc}
                 </p>
                 <div className="text-[8px] font-mono text-accent/60 opacity-0 group-hover:opacity-100 transition-opacity">
-                  &gt; EXECUTING WORKFLOW...
+                  &gt; Deep Dive...
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
+
+        {/* Automation Modal Component */}
+        <AutomationModal 
+          isOpen={activeModal !== null} 
+          onClose={() => setActiveModal(null)} 
+          data={activeModal !== null ? automationDetails[activeModal] : null}
+          theme="dark" // Ideally would use a theme hook, but hardcoding 'dark' as base and handled in component
+        />
       </section>
 
       {/* 5.2 Who We Build For */}
-      <section className="relative z-20 py-32 px-6 overflow-hidden">
+      <section className="relative z-20 pt-32 pb-12 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -390,21 +593,25 @@ export default function Home() {
                     <h3 className={`font-orbitron text-xs font-bold transition-colors mb-2 ${i === activeWhoIndex ? 'text-accent' : 'text-white'}`}>{item.title}</h3>
                     <p className={`transition-colors text-[10px] uppercase tracking-widest leading-tight ${i === activeWhoIndex ? 'text-white/90' : 'text-muted-foreground'}`}>{item.desc}</p>
                   </div>
-                  {i === activeWhoIndex && (
-                    <motion.div 
-                      layoutId="who-active-dot"
-                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-accent shadow-[0_0_10px_rgba(255,59,0,1)]"
-                    />
-                  )}
                 </motion.div>
               );
             })}
+
+            {/* Fixed Active Indicator Dot */}
+            <motion.div 
+              animate={{ 
+                x: Math.cos((([-90, 0, 90, 180][activeWhoIndex]) * Math.PI) / 180) * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 220) + (typeof window !== 'undefined' && window.innerWidth < 768 ? 70 : 112),
+                y: Math.sin((([-90, 0, 90, 180][activeWhoIndex]) * Math.PI) / 180) * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 220) - (typeof window !== 'undefined' && window.innerWidth < 768 ? 50 : 60),
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="absolute z-30 w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_15px_rgba(255,59,0,1)] pointer-events-none"
+            />
           </div>
         </div>
       </section>
 
       {/* 5.3 Tech Stack Preview */}
-      <section className="relative z-20 py-24 px-6 bg-accent/5 border-y border-white/5 overflow-hidden">
+      <section className="relative z-20 py-12 px-6 bg-slate-100 dark:bg-accent/5 border-y border-slate-200 dark:border-white/5 overflow-hidden transition-colors duration-500">
         {/* Energy Background */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="w-full h-full bg-[radial-gradient(circle_at_20%_20%,rgba(255,100,0,0.15),transparent_40%)]"></div>
@@ -515,7 +722,7 @@ export default function Home() {
       </section>
 
       {/* 5.4 Live Signal */}
-      <section className="relative z-20 py-32 px-6">
+      <section className="relative z-20 pt-12 pb-32 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -532,24 +739,32 @@ export default function Home() {
 
           <div className="flex flex-col md:flex-row gap-12">
             <div className="w-full md:w-1/2 space-y-4">
-              {[
-                { text: "Automation workflow deployed", time: "2d ago", img: "/demo-activity-1.png" },
-                { text: "Client system updated", time: "5d ago", img: "/demo-activity-2.webp" },
-                { text: "API integration completed", time: "1w ago", img: "/demo-activity-3.webp" }
-              ].map((item, i) => (
+              {activityFeedItems.map((item, i) => (
                 <motion.div 
                   key={i}
                   initial={{ opacity: 0, x: -40, filter: "blur(5px)" }}
                   whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
                   transition={{ duration: 0.7, delay: i * 0.15, ease: "easeOut" }}
                   viewport={viewportConfig}
-                  onMouseEnter={() => setActiveActivityImage(item.img)}
-                  onMouseLeave={() => setActiveActivityImage(null)}
-                  className="flex items-center justify-between p-4 bg-card/20 border-l-2 border-accent/30 hover:border-accent hover:bg-card/40 transition-all cursor-crosshair group"
+                  onMouseEnter={() => {
+                    setIsHoveringActivity(true);
+                    setActiveActivityIndex(i);
+                    setActiveActivityImage(item.img);
+                  }}
+                  onMouseLeave={() => {
+                    setIsHoveringActivity(false);
+                  }}
+                  className={`flex items-center justify-between p-4 bg-card/20 border-l-2 transition-all cursor-crosshair group ${
+                    activeActivityIndex === i 
+                      ? 'border-accent bg-card/40 shadow-[0_0_20px_rgba(255,59,0,0.1)]' 
+                      : 'border-accent/30 hover:border-accent hover:bg-card/40'
+                  }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></div>
-                    <span className="text-white font-sans text-sm tracking-wide group-hover:text-accent transition-colors">{item.text}</span>
+                    <div className={`w-1.5 h-1.5 rounded-full bg-accent ${activeActivityIndex === i ? 'animate-ping' : 'animate-pulse'}`}></div>
+                    <span className={`font-sans text-sm tracking-wide transition-colors ${
+                      activeActivityIndex === i ? 'text-accent' : 'text-white group-hover:text-accent'
+                    }`}>{item.text}</span>
                   </div>
                   <span className="text-muted-foreground text-[10px] font-mono">{item.time}</span>
                 </motion.div>
@@ -597,9 +812,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
             {[
-              { label: "82+", text: "Projects Deployed" },
-              { label: "29+", text: "Active Clients" },
-              { label: "12", text: "Ongoing Builds" },
+              { label: "35+", text: "Projects Deployed" },
+              { label: "10+", text: "Active Clients" },
+              { label: "12+", text: "Ongoing Builds" },
               { label: "96%", text: "Delivery Consistency" }
             ].map((stat, i) => (
               <motion.div 
@@ -635,14 +850,14 @@ export default function Home() {
       </section>
 
       {/* 7. Recent Deployments */}
-      <section className="relative z-20 py-32 px-6 overflow-hidden">
+      <section className="relative z-20 py-12 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={viewportConfig}
-            className="mb-16"
+            className="mb-12"
           >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// LIVE DATA</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
@@ -678,14 +893,14 @@ export default function Home() {
       </section>
 
       {/* 8. Workflow / Process */}
-      <section className="relative z-20 py-32 px-6">
+      <section className="relative z-20 py-12 px-6">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={viewportConfig}
-            className="mb-20"
+            className="mb-12"
           >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM FLOW</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
@@ -697,7 +912,7 @@ export default function Home() {
             {/* Continuous Motion Container */}
             <div className="flex animate-scroll-flow whitespace-nowrap py-10 will-change-transform">
               {[...Array(2)].map((_, listIndex) => (
-                <div key={listIndex} className="flex gap-8 px-4">
+                <div key={listIndex} className="flex gap-24 px-12">
                   {[
                     { step: "01", title: "ANALYZE" },
                     { step: "02", title: "ARCHITECT" },
@@ -709,16 +924,16 @@ export default function Home() {
                       className="relative z-10 group"
                     >
                       <div 
-                        className="w-32 h-32 md:w-40 md:h-40 flex flex-col items-center justify-center bg-background border border-accent/30 group-hover:border-accent transition-all duration-500 shadow-lg group-hover:shadow-accent/40 group-hover:scale-110 group-hover:z-20 group-hover:-translate-y-2 backdrop-blur-md"
+                        className="w-32 h-32 md:w-40 md:h-40 flex flex-col items-center justify-center bg-white dark:bg-slate-900 border border-accent/30 group-hover:border-accent transition-all duration-500 shadow-lg group-hover:shadow-accent/40 group-hover:scale-110 group-hover:z-20 group-hover:-translate-y-2 backdrop-blur-md"
                         style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
                       >
                         <span className="text-[10px] md:text-xs font-orbitron text-accent mb-2">{item.step}</span>
-                        <span className="font-orbitron text-xs md:text-sm font-bold text-white tracking-[0.2em] group-hover:text-white transition-colors">{item.title}</span>
+                        <span className="font-orbitron text-xs md:text-sm font-bold text-slate-900 dark:text-white tracking-[0.2em] transition-colors">{item.title}</span>
                         <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       </div>
                       
-                      {/* Connecting Line (Part of the item to maintain flow) */}
-                      <div className="absolute top-1/2 -right-8 w-8 h-[1px] bg-gradient-to-r from-accent/30 to-accent/30 hidden md:block"></div>
+                      {/* Connecting Line */}
+                      <div className="absolute top-1/2 -right-12 w-12 h-[1px] bg-gradient-to-r from-accent/30 to-accent/30 hidden md:block"></div>
                     </div>
                   ))}
                 </div>
@@ -729,7 +944,7 @@ export default function Home() {
       </section>
 
       {/* 9. Trust Signal Section */}
-      <section className="relative z-20 py-24 px-6 border-t border-white/5 bg-background/30 backdrop-blur-sm overflow-hidden">
+      <section className="relative z-20 py-24 px-6 border-t border-white/5 bg-[#15191E] overflow-hidden">
         {/* Verification Badge Background */}
         <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
           <img src="/verification-badge.png" alt="" className="w-54 h-54 md:w-76 md:h-76 blur-[.5rem]" />
@@ -743,8 +958,8 @@ export default function Home() {
             viewport={viewportConfig}
             className="md:max-w-md text-center md:text-left"
           >
-             <h3 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-slate-400 mb-6 uppercase tracking-[0.2em]">WHY <span className="text-accent">TRUST</span> US?</h3>
-             <p className="text-muted-foreground text-sm font-sans leading-relaxed tracking-wide">
+             <h3 className="font-orbitron text-2xl font-bold text-white mb-6 uppercase tracking-[0.2em]">WHY <span className="text-accent">TRUST</span> US?</h3>
+             <p className="text-slate-400 text-sm font-sans leading-relaxed tracking-wide">
                 We prioritize technical excellence and transparent communication for every deployment.
              </p>
           </motion.div>
@@ -761,10 +976,10 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.15, ease: "easeOut" }}
                 viewport={viewportConfig}
-                className="flex items-start gap-4 text-grey-800 text-sm font-sans dark:text-slate-600"
+                className="flex items-start gap-4 text-slate-300 text-sm font-sans"
               >
                 <CheckCircle2 size={18} className="text-accent shrink-0 mt-0.5" />
-                <span className="tracking-wide">{text}</span>
+                <span className="tracking-wide font-medium">{text}</span>
               </motion.div>
             ))}
           </div>
