@@ -1,40 +1,50 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Code, Globe, Shield, Smartphone, Zap, Database, Search, Layout, Settings, Rocket, Activity, Server, Cpu, CheckCircle2, ArrowRight } from 'lucide-react';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { Code, Globe, Shield, Smartphone, Zap, Database, Search, Layout, Settings, Rocket, Activity, Server, Cpu, CheckCircle2, ArrowRight, Send, X } from 'lucide-react';
 import Link from 'next/link';
 
-// Helper component for counting numbers using Framer Motion's useSpring for performance
-const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: number }) => {
-  const [isInView, setIsInView] = useState(false);
-  const countRef = React.useRef(null);
+// Helper component for displaying numbers (with optional counting for simple numeric values)
+const CountingNumber = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(value);
+  const [isCounting, setIsCounting] = useState(false);
+
+  // Check if this is a simple numeric value we can animate
+  const isNumeric = /^-?\d+(\.\d+)?(?:%|wks|weeks)?$/i.test(value.trim());
   
-  const numericValue = parseInt(value.replace(/[^0-9]/g, ''));
-  const suffix = value.replace(/[0-9]/g, '');
-
-  const motionValue = useMotionValue(0);
-  const springValue = useSpring(motionValue, {
-    damping: 30,
-    stiffness: 100,
-  });
-
-  const displayValue = useTransform(springValue, (latest) => Math.round(latest));
-
   useEffect(() => {
-    if (isInView) {
-      motionValue.set(numericValue);
+    if (isNumeric) {
+      // Extract just the number part
+      const numStr = value.replace(/[^0-9.]/g, '');
+      const num = parseFloat(numStr);
+      
+      if (!isNaN(num)) {
+        setIsCounting(true);
+        setDisplayValue('0');
+        
+        let current = 0;
+        const step = num / 50;
+        const interval = setInterval(() => {
+          current += step;
+          if (current >= num) {
+            setDisplayValue(value);
+            setIsCounting(false);
+            clearInterval(interval);
+          } else {
+            // Keep the suffix
+            const suffix = value.replace(/[0-9.]/g, '');
+            setDisplayValue(Math.round(current) + suffix);
+          }
+        }, 30);
+        
+        return () => clearInterval(interval);
+      }
     }
-  }, [isInView, numericValue, motionValue]);
+  }, [value, isNumeric]);
 
   return (
-    <motion.span
-      ref={countRef}
-      onViewportEnter={() => setIsInView(true)}
-    >
-      <motion.span>{displayValue}</motion.span>
-      {suffix}
-    </motion.span>
+    <span>{displayValue}</span>
   );
 };
 
@@ -45,6 +55,24 @@ const SectionTransition = () => (
 
 export default function Services() {
   const viewportConfig = { once: true, margin: "-100px" };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedInquiry, setSelectedInquiry] = useState('Web / App Development');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+    setTimeout(() => {
+      setIsSubmitted(false);
+      setIsModalOpen(false);
+      setName('');
+      setEmail('');
+      setMessage('');
+    }, 3000);
+  };
   
   const services = [
     {
@@ -201,8 +229,8 @@ export default function Services() {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center relative z-10">
             {[
-              { label: "2–5 WKS", text: "Avg Delivery Time" },
-              { label: "8–12", text: "Active Projects" },
+              { label: "2-5 WKS", text: "Avg Delivery Time" },
+              { label: "8-12", text: "Active Projects" },
               { label: "40%", text: "Client Retention" },
               { label: "<5%", text: "Bugs Post Delivery" }
             ].map((stat, i) => (
@@ -633,12 +661,12 @@ export default function Services() {
                 transition={{ duration: 0.8, delay: 0.4 }}
                 className="flex flex-col sm:flex-row items-center justify-center gap-6"
               >
-                <Link 
-                  href="/contact"
+                <button 
+                  onClick={() => setIsModalOpen(true)}
                   className="w-full sm:w-auto px-10 py-5 bg-white text-accent font-orbitron font-bold tracking-[0.2em] uppercase hover:bg-white/90 transition-all duration-300 shadow-xl"
                 >
                   START PROJECT
-                </Link>
+                </button>
                 <Link 
                   href="/contact"
                   className="w-full sm:w-auto px-10 py-5 bg-transparent border border-white/40 text-white font-orbitron font-bold tracking-[0.2em] uppercase hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
@@ -649,8 +677,140 @@ export default function Services() {
             </div>
           </motion.div>
         </section>
-
       </div>
+
+      {/* Modal */}
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setIsModalOpen(false);
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-card/95 backdrop-blur-xl border border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden relative shadow-[0_0_50px_rgba(255,80,0,0.2)] my-8"
+            >
+              {/* Close button */}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsModalOpen(false);
+                }}
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-all z-50 cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+              
+              {/* Corner accents like contact page */}
+              <div className="absolute top-0 right-0 w-20 h-20 border-t-2 border-r-2 border-accent/40 rounded-tr-2xl"></div>
+              <div className="absolute bottom-0 left-0 w-20 h-20 border-b-2 border-l-2 border-accent/40 rounded-bl-2xl"></div>
+
+              <div className="p-8 md:p-12 relative z-10">
+                <h3 className="font-orbitron text-2xl font-bold text-white mb-8 tracking-widest uppercase">
+                  START A <span className="text-accent drop-shadow-[0_0_10px_var(--accent)]">PROJECT</span>
+                </h3>
+                <form className="space-y-6" onSubmit={handleSubmit}>
+                  <div className="space-y-3">
+                    <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Select Your Request <span className="text-red-500">*</span></label>
+                    <div className="flex flex-wrap gap-2">
+                      {['Web / App Development', 'Automation Systems', 'AI Agents / Tools', 'Custom Software'].map((type) => (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() => setSelectedInquiry(type)}
+                          className={`px-4 py-2 text-[10px] font-bold uppercase tracking-widest font-sans transition-all border rounded-full ${
+                            selectedInquiry === type 
+                              ? 'bg-accent border-accent text-white shadow-[0_0_10px_var(--accent)]' 
+                              : 'bg-background/50 border-white/10 text-muted-foreground hover:border-accent/40'
+                          }`}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Name <span className="text-red-500">*</span></label>
+                      <input 
+                        type="text" 
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full bg-background/50 border border-white/10 p-4 text-white focus:outline-none focus:border-accent focus:shadow-[0_0_10px_var(--accent)] transition-all rounded-lg font-sans"
+                        placeholder="XXXX"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Email <span className="text-red-500">*</span></label>
+                      <input 
+                        type="email" 
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full bg-background/50 border border-white/10 p-4 text-white focus:outline-none focus:border-accent focus:shadow-[0_0_10px_var(--accent)] transition-all rounded-lg font-sans"
+                        placeholder="X@example.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Subject <span className="text-red-500">*</span></label>
+                    <input 
+                      type="text" 
+                      value={selectedInquiry}
+                      readOnly
+                      className="w-full bg-background/50 border border-white/10 p-4 text-white focus:outline-none rounded-lg font-sans opacity-70"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Message <span className="text-red-500">*</span></label>
+                    <textarea 
+                      rows={4}
+                      required
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      className="w-full bg-background/50 border border-white/10 p-4 text-white focus:outline-none focus:border-accent focus:shadow-[0_0_10px_var(--accent)] transition-all resize-none rounded-lg font-sans"
+                      placeholder="Tell us about your vision..."
+                    ></textarea>
+                  </div>
+
+                  <button className="w-full bg-accent text-white font-sans font-bold py-4 hover:bg-accent/90 transition-all flex items-center justify-center gap-2 rounded-lg shadow-lg shadow-accent/30 hover:shadow-accent/50">
+                    TRANSMIT MESSAGE <Send size={18} />
+                  </button>
+                </form>
+
+                {/* Success message */}
+                <AnimatePresence>
+                  {isSubmitted && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="absolute inset-0 bg-card/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-8"
+                    >
+                      <CheckCircle2 size={48} className="text-accent mb-4 animate-bounce" />
+                      <h3 className="font-orbitron text-xl font-bold text-white mb-2 uppercase tracking-widest">SIGNAL RECEIVED</h3>
+                      <p className="text-muted-foreground font-sans text-sm tracking-wide">
+                        &gt; message transmitted successfully
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

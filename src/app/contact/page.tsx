@@ -2,22 +2,102 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, MapPin, Phone, Mail, CheckCircle2, MessageCircle, Copy, ExternalLink, Activity } from 'lucide-react';
+import { Send, MapPin, Phone, Mail, CheckCircle2, MessageCircle, Copy, ExternalLink, Activity, AlertCircle } from 'lucide-react';
+import { isValidEmail } from '@/lib/supabase';
 
 export default function Contact() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [selectedInquiry, setSelectedInquiry] = useState('Web / App Development');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // Reset after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+    
+    // Prevent duplicate submissions
+    if (isSubmitting) return;
+
+    // Sanitize inputs
+    const sanitizedName = name.trim();
+    const sanitizedEmail = email.trim();
+    const sanitizedMessage = message.trim();
+
+    // Validate inputs
+    if (!sanitizedName || !sanitizedEmail || !sanitizedMessage) {
+      setIsError(true);
+      setErrorMessage('All fields are required!');
+      setTimeout(() => {
+        setIsError(false);
+        setErrorMessage('');
+      }, 5000);
+      return;
+    }
+
+    if (!isValidEmail(sanitizedEmail)) {
+      setIsError(true);
+      setErrorMessage('Please enter a valid email address!');
+      setTimeout(() => {
+        setIsError(false);
+        setErrorMessage('');
+      }, 5000);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setIsError(false);
+    setErrorMessage('');
+
+    try {
+      // Call our API route
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          service_type: selectedInquiry,
+          name: sanitizedName,
+          email: sanitizedEmail,
+          subject: selectedInquiry,
+          message: sanitizedMessage
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit form');
+      }
+
+      // Success
+      setIsSubmitted(true);
+      setName('');
+      setEmail('');
+      setMessage('');
+      
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 5000);
+
+    } catch (err: any) {
+      console.error('Form submission error:', err);
+      setIsError(true);
+      setErrorMessage(err.message || 'An error occurred while submitting the form. Please try again later.');
+      setTimeout(() => {
+        setIsError(false);
+        setErrorMessage('');
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    // Could add a toast here if available
   };
 
   return (
@@ -52,9 +132,9 @@ export default function Contact() {
 
             <div className="space-y-8">
               {[
-                { icon: MapPin, title: "Base of Operations", text: "Cyber City, Gurugram, India", action: null },
-                { icon: Phone, title: "Secure Line", text: "+91 98765 43210", action: "copy" },
-                { icon: Mail, title: "Data Stream", text: "hello@bharattitan.in", action: "email" }
+                { icon: MapPin, title: "Base of Operations", text: "Gaur City ,Noida, India", action: null },
+                { icon: Phone, title: "Secure Line", text: "+91 7017296984", action: "copy" },
+                { icon: Mail, title: "Data Stream", text: "bharattitanofficial@gmail.com", action: "email" }
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-6 group">
                   <div className="w-12 h-12 bg-card/40 flex items-center justify-center border border-white/5 group-hover:border-accent transition-colors duration-300 rounded-lg group-hover:shadow-[0_0_10px_var(--accent)] shrink-0">
@@ -93,11 +173,24 @@ export default function Contact() {
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-6 py-3 bg-card/40 border border-white/5 hover:border-accent/40 transition-all rounded-xl group">
+                <a href="mailto:bharattitanofficial@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-6 py-3 bg-card/40 border border-white/5 hover:border-accent/40 transition-all rounded-xl group">
+                  <MessageCircle size={18} className="text-accent group-hover:scale-110 transition-transform" />
+                  <span className="text-xs font-bold text-white uppercase tracking-wider font-sans">Email Connect</span>
+                </a>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <a href="https://wa.me/917017296984" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-6 py-3 bg-card/40 border border-white/5 hover:border-accent/40 transition-all rounded-xl group">
                   <MessageCircle size={18} className="text-accent group-hover:scale-110 transition-transform" />
                   <span className="text-xs font-bold text-white uppercase tracking-wider font-sans">WhatsApp Connect</span>
                 </a>
               </div>
+              <div className="flex flex-wrap gap-4">
+                <a href="tel:917017296984" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-6 py-3 bg-card/40 border border-white/5 hover:border-accent/40 transition-all rounded-xl group">
+                  <MessageCircle size={18} className="text-accent group-hover:scale-110 transition-transform" />
+                  <span className="text-xs font-bold text-white uppercase tracking-wider font-sans">Call Connect</span>
+                </a>
+              </div>
+              
             </div>
           </motion.div>
 
@@ -116,7 +209,7 @@ export default function Contact() {
               <form className="space-y-6 relative z-10" onSubmit={handleSubmit}>
                 {/* // INQUIRY TYPES */}
                 <div className="space-y-3">
-                  <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Select Your Request</label>
+                  <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Select Your Request <span className="text-red-500">*</span></label>
                   <div className="flex flex-wrap gap-2">
                     {['Web / App Development', 'Automation Systems', 'AI Agents / Tools', 'Custom Software'].map((type) => (
                       <button
@@ -137,27 +230,31 @@ export default function Contact() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Name</label>
+                    <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Name <span className="text-red-500">*</span></label>
                     <input 
                       type="text" 
                       required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="w-full bg-background/50 border border-white/10 p-4 text-white focus:outline-none focus:border-accent focus:shadow-[0_0_10px_var(--accent)] transition-all rounded-lg font-sans"
-                      placeholder="John Doe"
+                      placeholder="XXXX"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Email</label>
+                    <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Email <span className="text-red-500">*</span></label>
                     <input 
                       type="email" 
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-background/50 border border-white/10 p-4 text-white focus:outline-none focus:border-accent focus:shadow-[0_0_10px_var(--accent)] transition-all rounded-lg font-sans"
-                      placeholder="john@example.com"
+                      placeholder="X@example.com"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Subject</label>
+                  <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Subject <span className="text-red-500">*</span></label>
                   <input 
                     type="text" 
                     value={selectedInquiry}
@@ -167,18 +264,24 @@ export default function Contact() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Message</label>
+                  <label className="text-xs font-bold text-accent uppercase tracking-wider font-sans">Message <span className="text-red-500">*</span></label>
                   <textarea 
                     rows={4}
                     required
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     className="w-full bg-background/50 border border-white/10 p-4 text-white focus:outline-none focus:border-accent focus:shadow-[0_0_10px_var(--accent)] transition-all resize-none rounded-lg font-sans"
                     placeholder="Tell us about your vision..."
                   ></textarea>
                 </div>
 
                 <div className="space-y-4">
-                  <button className="w-full bg-accent text-white font-sans font-bold py-4 hover:bg-accent/90 transition-all flex items-center justify-center gap-2 rounded-lg shadow-lg shadow-accent/30 hover:shadow-accent/50 cursor-pointer">
-                    TRANSMIT MESSAGE <Send size={18} />
+                  <button 
+                    disabled={isSubmitting}
+                    className="w-full bg-accent text-white font-sans font-bold py-4 hover:bg-accent/90 transition-all flex items-center justify-center gap-2 rounded-lg shadow-lg shadow-accent/30 hover:shadow-accent/50 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? 'TRANSMITTING...' : 'TRANSMIT MESSAGE'}
+                    {!isSubmitting && <Send size={18} />}
                   </button>
                   <p className="text-center text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
                     &gt; secure transmission enabled
@@ -197,6 +300,20 @@ export default function Contact() {
                       <h3 className="font-orbitron text-xl font-bold text-white mb-2 uppercase tracking-widest">SIGNAL RECEIVED</h3>
                       <p className="text-muted-foreground font-sans text-sm tracking-wide">
                         &gt; message transmitted successfully
+                      </p>
+                    </motion.div>
+                  )}
+                  {isError && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 bg-background/90 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 z-20"
+                    >
+                      <AlertCircle size={48} className="text-red-500 mb-4" />
+                      <h3 className="font-orbitron text-xl font-bold text-white mb-2 uppercase tracking-widest">TRANSMISSION FAILED</h3>
+                      <p className="text-muted-foreground font-sans text-sm tracking-wide">
+                        &gt; {errorMessage}
                       </p>
                     </motion.div>
                   )}
