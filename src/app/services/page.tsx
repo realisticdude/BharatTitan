@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
-import { Code, Globe, Shield, Smartphone, Zap, Database, Search, Layout, Settings, Rocket, Activity, Server, Cpu, CheckCircle2, ArrowRight, Send, X } from 'lucide-react';
+import { Code, Globe, Shield, Smartphone, Zap, Database, Search, Layout, Settings, Rocket, Activity, Server, Cpu, CheckCircle2, ArrowRight, Send, X, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { isValidEmail } from '@/lib/supabase';
 
 // Helper component for displaying numbers (with optional counting for simple numeric values)
 const CountingNumber = ({ value }: { value: string }) => {
@@ -56,22 +57,95 @@ const SectionTransition = () => (
 export default function Services() {
   const viewportConfig = { once: true, margin: "-100px" };
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [selectedInquiry, setSelectedInquiry] = useState('Web / App Development');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setIsModalOpen(false);
+    
+    // Prevent duplicate submissions
+    if (isSubmitting) return;
+
+    // Sanitize inputs
+    const sanitizedName = name.trim();
+    const sanitizedEmail = email.trim();
+    const sanitizedMessage = message.trim();
+
+    // Validate inputs
+    if (!sanitizedName || !sanitizedEmail || !sanitizedMessage) {
+      setIsError(true);
+      setErrorMessage('All fields are required!');
+      setTimeout(() => {
+        setIsError(false);
+        setErrorMessage('');
+      }, 5000);
+      return;
+    }
+
+    if (!isValidEmail(sanitizedEmail)) {
+      setIsError(true);
+      setErrorMessage('Please enter a valid email address!');
+      setTimeout(() => {
+        setIsError(false);
+        setErrorMessage('');
+      }, 5000);
+      return;
+    }
+
+    setIsSubmitting(true);
+    setIsError(false);
+    setErrorMessage('');
+
+    try {
+      // Call our API route
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          service_type: selectedInquiry,
+          name: sanitizedName,
+          email: sanitizedEmail,
+          subject: selectedInquiry,
+          message: sanitizedMessage
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit form');
+      }
+
+      // Success
+      setIsSubmitted(true);
       setName('');
       setEmail('');
       setMessage('');
-    }, 3000);
+      
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setIsModalOpen(false);
+      }, 5000);
+
+    } catch (err: any) {
+      console.error('Form submission error:', err);
+      setIsError(true);
+      setErrorMessage(err.message || 'An error occurred while submitting the form. Please try again later.');
+      setTimeout(() => {
+        setIsError(false);
+        setErrorMessage('');
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   const services = [
@@ -785,23 +859,40 @@ export default function Services() {
                     ></textarea>
                   </div>
 
-                  <button className="w-full bg-accent text-white font-sans font-bold py-4 hover:bg-accent/90 transition-all flex items-center justify-center gap-2 rounded-lg shadow-lg shadow-accent/30 hover:shadow-accent/50">
-                    TRANSMIT MESSAGE <Send size={18} />
+                  <button 
+                    disabled={isSubmitting}
+                    className="w-full bg-accent text-white font-sans font-bold py-4 hover:bg-accent/90 transition-all flex items-center justify-center gap-2 rounded-lg shadow-lg shadow-accent/30 hover:shadow-accent/50 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? 'TRANSMITTING...' : 'TRANSMIT MESSAGE'}
+                    {!isSubmitting && <Send size={18} />}
                   </button>
                 </form>
 
-                {/* Success message */}
+                {/* Success and Error messages */}
                 <AnimatePresence>
                   {isSubmitted && (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="absolute inset-0 bg-card/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-8"
+                      className="absolute inset-0 bg-card/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 z-20"
                     >
                       <CheckCircle2 size={48} className="text-accent mb-4 animate-bounce" />
                       <h3 className="font-orbitron text-xl font-bold text-white mb-2 uppercase tracking-widest">SIGNAL RECEIVED</h3>
                       <p className="text-muted-foreground font-sans text-sm tracking-wide">
                         &gt; message transmitted successfully
+                      </p>
+                    </motion.div>
+                  )}
+                  {isError && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="absolute inset-0 bg-card/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 z-20"
+                    >
+                      <AlertCircle size={48} className="text-red-500 mb-4" />
+                      <h3 className="font-orbitron text-xl font-bold text-white mb-2 uppercase tracking-widest">TRANSMISSION FAILED</h3>
+                      <p className="text-muted-foreground font-sans text-sm tracking-wide">
+                        &gt; {errorMessage}
                       </p>
                     </motion.div>
                   )}
