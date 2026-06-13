@@ -76,8 +76,8 @@ export async function POST(request: Request) {
     if (resend) {
       console.log('Sending email via Resend...')
       const { data, error: resendError } = await resend.emails.send({
-        from: 'Bharat Titan Contact <onboarding@resend.dev>', // Replace with your verified domain
-        to: ['bharattitanofficial@gmail.com'],
+    from: 'Bharat Titan Contact <contact@bharattitan.com>',
+    to: ['bharattitanofficial@gmail.com'],
         subject: `New Contact Request: ${sanitizedData.subject}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
