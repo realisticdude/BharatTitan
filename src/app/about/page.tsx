@@ -369,7 +369,7 @@ export default function About() {
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 {[
-                    { label: "Systems Online", value: "50+" },
+                    { label: "Systems Online", value: "15+" },
                     { label: "Elite Partners", value: "5+" },
                     { label: "Cycles Active", value: "10+" },
                     { label: "Awards Unlocked", value: "5+" }
