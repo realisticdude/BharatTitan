@@ -206,9 +206,10 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Menu Toggle */}
-          <button 
+          <button
             className="md:hidden text-foreground p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

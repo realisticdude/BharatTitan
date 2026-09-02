@@ -142,8 +142,9 @@ export const Chatbot = () => {
                   </div>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setIsOpen(false)}
+                aria-label="Close chat"
                 className="text-muted-foreground hover:text-accent transition-colors"
               >
                 <X size={20} />
@@ -218,9 +219,10 @@ export const Chatbot = () => {
                   placeholder="Ask something..."
                   className="w-full bg-card/50 border border-white/10 rounded-xl px-4 py-3 pr-12 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-accent/50 transition-colors"
                 />
-                <button 
+                <button
                   type="submit"
                   disabled={!inputValue.trim()}
+                  aria-label="Send message"
                   className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-accent disabled:text-muted-foreground disabled:opacity-50 hover:scale-110 transition-all"
                 >
                   <Send size={18} />

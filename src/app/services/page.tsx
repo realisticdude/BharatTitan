@@ -199,9 +199,9 @@ export default function Services() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide">
+            <h1 className="font-orbitron text-4xl md:text-5xl font-bold text-white mb-4 tracking-wide">
               OUR <span className="text-accent drop-shadow-[0_0_10px_var(--accent)]">SERVICES</span>
-            </h2>
+            </h1>
             <p className="text-muted-foreground max-w-xl font-sans text-lg">
               Precision-engineered solutions for the modern era.
             </p>
@@ -243,9 +243,9 @@ export default function Services() {
                   <service.icon className="text-accent group-hover:text-white transition-colors" size={24} />
                 </div>
                 
-                <h3 className="font-sans text-xl font-bold text-white mb-3 group-hover:text-accent transition-colors">
+                <h2 className="font-sans text-xl font-bold text-white mb-3 group-hover:text-accent transition-colors">
                   {service.title}
-                </h3>
+                </h2>
                 
                 <p className="text-muted-foreground text-sm leading-relaxed mb-6 font-sans group-hover:text-white/90 transition-colors">
                   {service.description}
@@ -289,7 +289,7 @@ export default function Services() {
                         <span className="font-orbitron text-xs text-accent group-hover:text-white transition-colors">{item.step}</span>
                         <div className="absolute inset-0 bg-accent/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       </div>
-                      <h4 className="font-orbitron text-[10px] font-bold text-white tracking-widest mb-2 group-hover:text-accent transition-colors">{item.title}</h4>
+                      <h3 className="font-orbitron text-[10px] font-bold text-white tracking-widest mb-2 group-hover:text-accent transition-colors">{item.title}</h3>
                       <p className="text-muted-foreground text-[8px] font-sans leading-relaxed opacity-0 group-hover:opacity-80 transition-opacity max-w-[120px] whitespace-normal">{item.desc}</p>
                       
                       {/* Animated Connecting Line */}
@@ -609,7 +609,7 @@ export default function Services() {
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shadow-[0_0_10px_var(--accent)] group-hover:scale-150 transition-transform duration-300"></div>
                   <div>
-                    <h4 className="text-white font-sans text-sm font-bold tracking-wide mb-1 uppercase group-hover:text-accent transition-colors">{item.title}</h4>
+                    <h3 className="text-white font-sans text-sm font-bold tracking-wide mb-1 uppercase group-hover:text-accent transition-colors">{item.title}</h3>
                     <p className="text-muted-foreground text-xs font-sans tracking-wide group-hover:text-white/80 transition-colors">{item.desc}</p>
                   </div>
                 </motion.div>
@@ -646,7 +646,7 @@ export default function Services() {
               transition={{ duration: 0.3 }}
               className="p-8 bg-card/20 border border-white/5 space-y-6 hover:border-accent/30 hover:bg-accent/5 transition-all group relative rounded-xl"
             >
-              <h4 className="font-orbitron text-xs font-bold text-accent tracking-[0.3em] uppercase relative z-10">SOCIAL AUTOMATION</h4>
+              <h3 className="font-orbitron text-xs font-bold text-accent tracking-[0.3em] uppercase relative z-10">SOCIAL AUTOMATION</h3>
               <ul className="space-y-3 text-muted-foreground text-sm font-sans relative z-10">
                 <li className="group-hover:text-white transition-colors duration-300">• Content scheduling workflows</li>
                 <li className="group-hover:text-white transition-colors duration-300">• Auto-post pipelines</li>
@@ -661,7 +661,7 @@ export default function Services() {
               transition={{ duration: 0.3 }}
               className="p-8 bg-card/20 border border-white/5 space-y-6 hover:border-accent/30 hover:bg-accent/5 transition-all group relative rounded-xl"
             >
-              <h4 className="font-orbitron text-xs font-bold text-accent tracking-[0.3em] uppercase relative z-10">BUSINESS AUTOMATION</h4>
+              <h3 className="font-orbitron text-xs font-bold text-accent tracking-[0.3em] uppercase relative z-10">BUSINESS AUTOMATION</h3>
               <ul className="space-y-3 text-muted-foreground text-sm font-sans relative z-10">
                 <li className="group-hover:text-white transition-colors duration-300">• Invoice / report generation</li>
                 <li className="group-hover:text-white transition-colors duration-300">• Internal task tracking systems</li>

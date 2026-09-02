@@ -62,9 +62,9 @@ export default function About() {
             <div className="inline-block mb-4 px-3 py-1 border border-accent/30 bg-accent/5 rounded text-accent text-xs font-sans tracking-[0.3em] uppercase">
               Identity Core
             </div>
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white mb-6 tracking-wide">
+            <h1 className="font-orbitron text-4xl md:text-5xl font-bold text-white mb-6 tracking-wide">
               WHO WE <span className="text-accent drop-shadow-[0_0_10px_var(--accent)]">ARE</span>
-            </h2>
+            </h1>
             <div className="w-32 h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent mx-auto mb-8"></div>
             <p className="text-muted-foreground max-w-3xl mx-auto text-lg leading-relaxed font-sans">
               BharatTitan is an elite digital force. Born from the fusion of cold intelligence and fiery ambition, we craft experiences that defy the ordinary.
@@ -81,7 +81,7 @@ export default function About() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// ORIGIN SIGNAL</span>
-            <h3 className="font-orbitron text-2xl md:text-3xl font-bold text-white mb-6 tracking-wider uppercase">ORIGIN <span className="text-accent">SIGNAL</span></h3>
+            <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-white mb-6 tracking-wider uppercase">ORIGIN <span className="text-accent">SIGNAL</span></h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed font-sans mb-4">
               BharatTitan was initiated as a focused digital unit to build high-performance systems with precision and clarity.
             </p>

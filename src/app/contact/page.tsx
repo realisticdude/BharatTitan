@@ -122,9 +122,9 @@ export default function Contact() {
             </div>
 
             <div>
-              <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-white mb-6 tracking-wide">
+              <h1 className="font-orbitron text-4xl md:text-5xl font-bold text-white mb-6 tracking-wide">
                 GET IN <span className="text-accent drop-shadow-[0_0_10px_var(--accent)]">TOUCH</span>
-              </h2>
+              </h1>
               <p className="text-muted-foreground text-lg leading-relaxed font-sans">
                 Ready to forge something legendary? Signal our team and let&apos;s construct the future.
               </p>
@@ -142,7 +142,7 @@ export default function Contact() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-1">
-                      <h4 className="font-sans text-white font-bold tracking-wide">{item.title}</h4>
+                      <h2 className="font-sans text-white font-bold tracking-wide">{item.title}</h2>
                       {item.action && (
                         <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                           {item.action === 'copy' && (

@@ -87,7 +87,7 @@ export default function Products() {
             </span>
           </motion.div>
           
-          <h2 className="font-orbitron text-5xl md:text-7xl font-bold text-white mb-6 tracking-wide">
+          <h1 className="font-orbitron text-5xl md:text-7xl font-bold text-white mb-6 tracking-wide">
             {["FLAGSHIP", "PRODUCTS"].map((word, i) => (
               <motion.span
                 key={i}
@@ -99,9 +99,9 @@ export default function Products() {
                 {word}{" "}
               </motion.span>
             ))}
-          </h2>
-          
-          <motion.p 
+          </h1>
+
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
@@ -193,9 +193,9 @@ export default function Products() {
                       <div className="h-[1px] w-12 bg-accent/30"></div>
                     </div>
 
-                    <h3 className="font-orbitron text-4xl md:text-5xl font-black text-white mb-6 tracking-tighter leading-none group-hover:text-accent transition-colors duration-500">
+                    <h2 className="font-orbitron text-4xl md:text-5xl font-black text-white mb-6 tracking-tighter leading-none group-hover:text-accent transition-colors duration-500">
                       {product.name}
-                    </h3>
+                    </h2>
                     
                     <p className="text-muted-foreground text-lg font-sans leading-relaxed mb-10 opacity-80 group-hover:opacity-100 transition-opacity">
                       {product.desc}
@@ -253,9 +253,9 @@ export default function Products() {
                 <div className="inline-block px-3 py-1 bg-accent/10 border border-accent/30 text-accent text-[10px] font-bold tracking-widest uppercase rounded mb-4">
                   {product.tag}
                 </div>
-                <h3 className="font-orbitron text-2xl font-bold text-white mb-4">
+                <h2 className="font-orbitron text-2xl font-bold text-white mb-4">
                   {product.name}
-                </h3>
+                </h2>
                 <p className="text-muted-foreground text-sm font-sans leading-relaxed mb-6">
                   {product.desc}
                 </p>

@@ -109,8 +109,9 @@ const AutomationModal = ({ isOpen, onClose, data, theme }: { isOpen: boolean, on
                   {data.title}
                 </h2>
               </div>
-              <button 
+              <button
                 onClick={onClose}
+                aria-label="Close"
                 className="p-2 hover:bg-white/5 dark:hover:bg-white/5 light:hover:bg-slate-200 rounded-full transition-colors text-slate-400"
               >
                 <X size={20} />
@@ -291,10 +292,11 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-10"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10"></div>
           <Image
-              src="/hero-wolf.png"
+              src="/hero-wolf.webp"
               alt="Futuristic Wolf Pack"
               fill
               priority
+              sizes="100vw"
               className="object-cover object-center mix-blend-normal dark:mix-blend-lighten opacity-50 dark:opacity-100"
           />
           <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10 hidden dark:block"></div>
@@ -477,9 +479,10 @@ export default function Home() {
         {/* Background Image Layer */}
         <div className="absolute inset-0 opacity-60 pointer-events-none">
           <MotionImage
-            src="/demo-automation-bg.png"
+            src="/demo-automation-bg.webp"
             alt=""
             fill
+            sizes="(max-width: 768px) 100vw, 1024px"
             className="object-contain will-change-transform"
             animate={{ rotate: 360 }}
             transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
@@ -980,7 +983,7 @@ export default function Home() {
       <section className="relative z-20 py-24 px-6 border-t border-white/5 bg-[#15191E] overflow-hidden">
         {/* Verification Badge Background */}
         <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
-          <Image src="/verification-badge.png" alt="" width={304} height={304} className="w-54 h-54 md:w-76 md:h-76 blur-[.5rem]" />
+          <Image src="/verification-badge.webp" alt="" width={304} height={304} className="w-54 h-54 md:w-76 md:h-76 blur-[.5rem]" />
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
