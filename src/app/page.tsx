@@ -420,7 +420,7 @@ export default function Home() {
             viewport={viewportConfig}
             className="mb-16"
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// CORE MODULES</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">CORE MODULES:</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               CORE <span className="text-accent">CAPABILITIES</span>
             </h2>
@@ -499,7 +499,7 @@ export default function Home() {
             viewport={viewportConfig}
             className="mb-16"
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// AUTOMATION CORE</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">AUTOMATION CORE:</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase mb-4">
               AUTOMATION & <span className="text-accent">AI SYSTEMS</span>
             </h2>
@@ -556,7 +556,7 @@ export default function Home() {
             viewport={viewportConfig}
             className="mb-16 text-center"
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// CLIENT TARGETING</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">CLIENT TARGETING:</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               WHO WE <span className="text-accent">BUILD FOR</span>
             </h2>
@@ -661,7 +661,7 @@ export default function Home() {
             viewport={viewportConfig}
             className="mb-12"
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM STACK</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">SYSTEM STACK:</span>
             <h2 className="font-orbitron text-2xl font-bold text-slate-800 dark:text-slate-400 tracking-widest uppercase">TECH <span className="text-accent">ENVIRONMENT</span></h2>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -767,7 +767,7 @@ export default function Home() {
             viewport={viewportConfig}
             className="mb-16"
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// LIVE SIGNAL</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">LIVE SIGNAL:</span>
             <h2 className="font-orbitron text-4xl md:text-5 font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               ACTIVITY <span className="text-accent">FEED</span>
             </h2>
@@ -895,7 +895,7 @@ export default function Home() {
             viewport={viewportConfig}
             className="mb-12"
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// LIVE DATA</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">LIVE DATA:</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               RECENT <span className="text-accent">DEPLOYMENTS</span>
             </h2>
@@ -938,7 +938,7 @@ export default function Home() {
             viewport={viewportConfig}
             className="mb-12"
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM FLOW</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">SYSTEM FLOW:</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-400 tracking-tighter uppercase">
               OUR <span className="text-accent">WORKFLOW</span>
             </h2>

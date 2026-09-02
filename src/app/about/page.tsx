@@ -80,7 +80,7 @@ export default function About() {
             viewport={viewportConfig}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// ORIGIN SIGNAL</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">ORIGIN SIGNAL:</span>
             <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-white mb-6 tracking-wider uppercase">ORIGIN <span className="text-accent">SIGNAL</span></h2>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed font-sans mb-4">
               BharatTitan was initiated as a focused digital unit to build high-performance systems with precision and clarity.
@@ -160,7 +160,7 @@ export default function About() {
         {/* 2. OPERATION PRINCIPLES */}
         <section className="mb-32">
           <div className="mb-12">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// CORE LOGIC</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">CORE LOGIC:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">OPERATION <span className="text-accent">PRINCIPLES</span></h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -191,7 +191,7 @@ export default function About() {
         <section className="mb-32 p-8 md:p-12 bg-card/10 border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[100px] pointer-events-none"></div>
           <div className="mb-12">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// INTERNAL STRUCTURE</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">INTERNAL STRUCTURE:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">TECH STACK <span className="text-accent">CORE</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
@@ -238,7 +238,7 @@ export default function About() {
           </div>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent"></div>
           <div className="relative z-10 max-w-2xl mx-auto">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-6">// SYSTEM DATA</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-6">SYSTEM DATA:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase mb-8">SYSTEM <span className="text-accent">PHILOSOPHY</span></h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {[
@@ -270,7 +270,7 @@ export default function About() {
             <div className="absolute left-0 top-0 h-full w-[2px] bg-accent/30 shadow-[0_0_10px_var(--accent)]"></div>
             <div className="pl-6">
               <div className="mb-8">
-                <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// NETWORK</span>
+                <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">NETWORK:</span>
                 <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase">GLOBAL <span className="text-accent">REACH</span></h2>
               </div>
               <div className="space-y-4">
@@ -299,7 +299,7 @@ export default function About() {
           {/* Current Focus */}
           <section>
             <div className="mb-8">
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// OPERATIONS</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">OPERATIONS:</span>
               <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase">CURRENT <span className="text-accent">FOCUS</span></h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -339,7 +339,7 @@ export default function About() {
               viewport={viewportConfig}
               transition={{ duration: 0.8 }}
             >
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// EXECUTION</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">EXECUTION:</span>
               <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase mb-6">TEAM <span className="text-accent">STRUCTURE</span></h2>
               <p className="text-muted-foreground text-base leading-relaxed font-sans mb-4">
                 Small, focused, and execution-driven.

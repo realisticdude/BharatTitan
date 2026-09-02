@@ -160,32 +160,38 @@ export default function Services() {
     {
       icon: Globe,
       title: "Web Development",
-      description: "High-performance interfaces built with Next.js. Optimized for speed and conversion."
+      description: "High-performance interfaces built with Next.js. Optimized for speed and conversion.",
+      image: "/placeholder-design.jpg"
     },
     {
       icon: Smartphone,
       title: "Mobile Solutions",
-      description: "Native and cross-platform mobile applications for iOS and Android."
+      description: "Native and cross-platform mobile applications for iOS and Android.",
+      image: "/demo-activity-3.webp"
     },
     {
       icon: Shield,
       title: "Cyber Security",
-      description: "Fortify your digital assets with elite security protocols. We build vaults."
+      description: "Fortify your digital assets with elite security protocols. We build vaults.",
+      image: "/core-bg.jpg"
     },
     {
       icon: Zap,
       title: "Digital Strategy",
-      description: "Data-driven roadmaps to accelerate transformation and outpace competition."
+      description: "Data-driven roadmaps to accelerate transformation and outpace competition.",
+      image: "/tech-preview.jpg"
     },
     {
       icon: Database,
       title: "Cloud Infrastructure",
-      description: "Scalable, secure cloud architecture for high-traffic enterprise applications."
+      description: "Scalable, secure cloud architecture for high-traffic enterprise applications.",
+      image: "/bharat-cloud.png"
     },
     {
       icon: Code,
       title: "Custom Software",
-      description: "Tailor-made solutions designed to solve unique business challenges."
+      description: "Tailor-made solutions designed to solve unique business challenges.",
+      image: "/fortress-ui.png"
     }
   ];
 
@@ -229,9 +235,9 @@ export default function Services() {
               {/* Interactive Depth Background */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(circle_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,80,0,0.15),transparent_40%)]" />
               
-              {/* Service Demo Image Placeholder */}
+              {/* Service Demo Image */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-all duration-700 pointer-events-none scale-110 group-hover:scale-100">
-                <Image src="/service-demo.jpg" alt="" fill className="object-cover" />
+                <Image src={service.image} alt="" fill className="object-cover" />
               </div>
 
               <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -264,7 +270,7 @@ export default function Services() {
         {/* 1. SERVICE EXECUTION FLOW */}
         <section className="mb-32 relative overflow-hidden">
           <div className="mb-16">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SERVICE FLOW</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">SERVICE FLOW:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">SERVICE <span className="text-accent">EXECUTION FLOW</span></h2>
           </div>
           
@@ -340,7 +346,7 @@ export default function Services() {
         {/* 3. TECH STACK SNAPSHOT */}
         <section className="mb-32 relative">
           <div className="mb-12">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM STACK</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">SYSTEM STACK:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">TECH STACK <span className="text-accent">SNAPSHOT</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
@@ -390,7 +396,7 @@ export default function Services() {
           {/* Coverage */}
           <section className="relative z-10">
             <div className="mb-10">
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// OPERATION MODE</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">OPERATION MODE:</span>
               <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase">SERVICE <span className="text-accent">COVERAGE</span></h2>
             </div>
             <div className="grid grid-cols-1 gap-3">
@@ -421,7 +427,7 @@ export default function Services() {
           {/* Engagement */}
           <section className="relative z-10">
             <div className="mb-10">
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// EXECUTION CORE</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">EXECUTION CORE:</span>
               <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase">ENGAGEMENT <span className="text-accent">MODELS</span></h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -495,7 +501,7 @@ export default function Services() {
           {/* Support */}
           <section className="flex flex-col justify-center pl-4 border-l border-white/5">
             <div className="mb-8">
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// RELIABILITY</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">RELIABILITY:</span>
               <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase">SUPPORT & <span className="text-accent">MAINTENANCE</span></h2>
             </div>
             <div className="space-y-4">
@@ -524,7 +530,7 @@ export default function Services() {
         {/* 8. AUTOMATION SYSTEMS (Visual Split System) */}
         <section className="mb-32">
           <div className="mb-16">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// AUTOMATION CORE</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">AUTOMATION CORE:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">AUTOMATION <span className="text-accent">SYSTEMS</span></h2>
           </div>
           
@@ -588,7 +594,7 @@ export default function Services() {
         <section className="mb-32 p-8 md:p-12 bg-card/10 border border-white/5 relative overflow-hidden rounded-xl">
           <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[100px] pointer-events-none"></div>
           <div className="mb-12">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// AI SYSTEMS</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">AI SYSTEMS:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">AI AGENTS & <span className="text-accent">INTELLIGENT SYSTEMS</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -637,7 +643,7 @@ export default function Services() {
         {/* 10. SOCIAL & BUSINESS AUTOMATION (Switch System) */}
         <section className="mb-32">
           <div className="mb-12">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// WORKFLOW ENGINE</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">WORKFLOW ENGINE:</span>
             <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">SOCIAL & <span className="text-accent">BUSINESS AUTOMATION</span></h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">

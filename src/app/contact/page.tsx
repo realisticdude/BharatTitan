@@ -117,7 +117,7 @@ export default function Contact() {
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-accent/10 border border-accent/20 rounded-full">
               <Activity size={12} className="text-accent animate-pulse" />
               <span className="text-[10px] font-orbitron text-accent font-bold tracking-[0.2em] uppercase">
-                // OPERATION LIMIT: LIMITED SLOTS AVAILABLE
+                OPERATION LIMIT: LIMITED SLOTS AVAILABLE
               </span>
             </div>
 
@@ -167,7 +167,7 @@ export default function Contact() {
             {/* Quick Actions & Communication Mode */}
             <div className="pt-8 border-t border-white/5 space-y-6">
               <div>
-                <span className="text-[10px] font-orbitron text-accent/60 tracking-widest uppercase mb-4 block">// COMMUNICATION MODE</span>
+                <span className="text-[10px] font-orbitron text-accent/60 tracking-widest uppercase mb-4 block">COMMUNICATION MODE:</span>
                 <p className="text-muted-foreground text-sm font-sans italic">
                   Email / WhatsApp / Call (based on request)
                 </p>
@@ -328,7 +328,7 @@ export default function Contact() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="p-8 bg-card/30 border border-white/5 rounded-2xl"
             >
-              <span className="text-accent text-[10px] font-orbitron font-bold tracking-[0.3em] uppercase block mb-6">// PROCESS SIGNAL</span>
+              <span className="text-accent text-[10px] font-orbitron font-bold tracking-[0.3em] uppercase block mb-6">PROCESS SIGNAL:</span>
               <h3 className="font-orbitron text-lg font-bold text-white mb-6 tracking-widest uppercase">WHAT HAPPENS <span className="text-accent">NEXT</span></h3>
               <div className="space-y-4">
                 {[
@@ -350,7 +350,7 @@ export default function Contact() {
         {/* // SYSTEM TRUST STRIP */}
         <div className="w-full py-12 border-t border-white/5">
           <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-            <span className="text-accent text-[10px] font-orbitron font-bold tracking-[0.3em] uppercase block w-full text-center mb-4">// SYSTEM TRUST</span>
+            <span className="text-accent text-[10px] font-orbitron font-bold tracking-[0.3em] uppercase block w-full text-center mb-4">SYSTEM TRUST:</span>
             {[
               "Projects across 4+ domains",
               "Experience with international clients",

@@ -272,7 +272,7 @@ export default function Products() {
         <section className="mb-32">
           <div className="mb-12 flex items-center justify-between">
             <div>
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM DATA</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">SYSTEM DATA:</span>
               <h2 className="font-orbitron text-4xl font-bold text-white tracking-widest uppercase">USE <span className="text-accent">CASES</span></h2>
             </div>
             <div className="hidden md:block h-[1px] flex-1 mx-12 bg-gradient-to-r from-accent/20 to-transparent"></div>
@@ -318,7 +318,7 @@ export default function Products() {
         <section className="mb-32 p-8 md:p-16 bg-card/10 border border-white/5 relative overflow-hidden rounded-3xl backdrop-blur-sm">
           <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 blur-[120px] -z-10"></div>
           <div className="mb-16">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// ACCESS CONTROL</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">ACCESS CONTROL:</span>
             <h2 className="font-orbitron text-4xl font-bold text-white tracking-widest uppercase">SYSTEM <span className="text-accent">PROGRESSION</span></h2>
           </div>
           <div className="space-y-12 max-w-4xl">
@@ -383,7 +383,7 @@ export default function Products() {
           <section className="p-8 bg-card/10 border border-white/5 rounded-3xl backdrop-blur-sm relative overflow-hidden group">
             <div className="absolute top-0 left-0 w-32 h-32 bg-accent/5 blur-3xl group-hover:bg-accent/10 transition-all"></div>
             <div className="mb-10">
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// PERMISSIONS</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">PERMISSIONS:</span>
               <h2 className="font-orbitron text-3xl font-bold text-white tracking-widest uppercase">ACCESS <span className="text-accent">MODEL</span></h2>
             </div>
             <div className="space-y-4">
@@ -439,7 +439,7 @@ export default function Products() {
         {/* 8. FUTURE PIPELINE */}
         <section className="mb-32">
           <div className="mb-8">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// ROADMAP</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">ROADMAP:</span>
             <h2 className="font-orbitron text-2xl font-bold text-white tracking-widest uppercase">FUTURE <span className="text-accent">PIPELINE</span></h2>
           </div>
           <div className="space-y-4 opacity-60">
@@ -525,7 +525,7 @@ export default function Products() {
         <section className="mb-32">
           <div className="mb-12 flex items-center justify-between">
             <div>
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM DATA</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">SYSTEM DATA:</span>
               <h2 className="font-orbitron text-4xl font-bold text-white tracking-widest uppercase">AUTOMATION <span className="text-accent">USE CASES</span></h2>
             </div>
             <div className="hidden md:block h-[1px] flex-1 mx-12 bg-gradient-to-r from-accent/20 to-transparent"></div>
@@ -577,7 +577,7 @@ export default function Products() {
         <section className="mb-32">
           <div className="mb-12 flex items-center justify-between">
             <div>
-              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// SYSTEM STACK</span>
+              <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">SYSTEM STACK:</span>
               <h2 className="font-orbitron text-4xl font-bold text-white tracking-widest uppercase">SYSTEM <span className="text-accent">INTEGRATIONS</span></h2>
             </div>
             <div className="hidden md:block h-[1px] flex-1 mx-12 bg-gradient-to-r from-accent/20 to-transparent"></div>
@@ -613,7 +613,7 @@ export default function Products() {
         <section className="mb-32 p-12 bg-accent/5 border border-accent/20 relative group overflow-hidden rounded-3xl backdrop-blur-md">
           <div className="absolute top-0 right-0 w-96 h-96 bg-accent/10 blur-[120px] -translate-y-1/2 translate-x-1/2 group-hover:bg-accent/20 transition-all"></div>
           <div className="max-w-3xl">
-            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">// HYBRID SYSTEMS</span>
+            <span className="text-accent text-xs font-bold tracking-[0.3em] uppercase block mb-4">HYBRID SYSTEMS:</span>
             <h2 className="font-orbitron text-4xl font-bold text-white tracking-widest uppercase mb-6">AI + <span className="text-accent">AUTOMATION</span></h2>
             <p className="text-muted-foreground font-sans text-lg leading-relaxed tracking-wide mb-8 opacity-80 group-hover:opacity-100">
               Combining structured workflows with lightweight AI agents to create semi-autonomous systems for business operations. We bridge the gap between deterministic logic and adaptive intelligence.

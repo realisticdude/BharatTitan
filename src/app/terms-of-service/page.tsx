@@ -22,7 +22,7 @@ const TermsOfService = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-16"
         >
-          <p className="text-accent font-orbitron text-sm tracking-[0.3em] mb-4">// LEGAL DOCUMENT</p>
+          <p className="text-accent font-orbitron text-sm tracking-[0.3em] mb-4">LEGAL DOCUMENT:</p>
           <h1 className="text-4xl md:text-5xl font-orbitron font-bold text-foreground mb-6">
             TERMS OF <span className="text-accent">SERVICE</span>
           </h1>
