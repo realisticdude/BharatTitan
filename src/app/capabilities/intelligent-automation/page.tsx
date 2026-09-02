@@ -2,8 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Zap, Activity, Cpu, ChevronRight, Home, ArrowRight, Image as ImageIcon } from 'lucide-react';
+import { Zap, Activity, Cpu, ChevronRight, ArrowRight, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 
 export default function IntelligentAutomation() {
   const features = [
@@ -98,15 +99,12 @@ export default function IntelligentAutomation() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative aspect-[16/10] bg-slate-50 dark:bg-[#15191E] border border-slate-200 dark:border-white/5 rounded-lg flex items-center justify-center overflow-hidden group shadow-inner"
             >
-              {/* IMAGE PLACEHOLDER - REPLACE SRC LATER */}
               <div className="absolute inset-0 z-0">
-                 <img 
-                    src="/placeholder-automation.jpg" 
-                    alt="Intelligent Automation Visual" 
-                    className="w-full h-full object-cover opacity-10 dark:opacity-20"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
+                 <NextImage
+                    src="/placeholder-automation.jpg"
+                    alt="Intelligent Automation Visual"
+                    fill
+                    className="object-cover opacity-10 dark:opacity-20"
                  />
               </div>
 
@@ -146,7 +144,7 @@ export default function IntelligentAutomation() {
             READY TO BUILD SOMETHING <span className="text-accent">ELITE?</span>
           </h2>
           <p className="text-muted-foreground text-sm font-sans mb-10">
-            Let's turn your idea into a high-performance system.
+            Let&apos;s turn your idea into a high-performance system.
           </p>
           
           <div className="flex flex-col items-center gap-8">
@@ -159,7 +157,7 @@ export default function IntelligentAutomation() {
             
             <div className="flex flex-col items-center gap-4">
                <div className="w-12 h-12 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-full flex items-center justify-center shadow-sm">
-                  <img src="/company-logo.png" alt="BharatTitan" className="w-6 h-6 grayscale opacity-50" />
+                  <NextImage src="/company-logo.png" alt="BharatTitan" width={24} height={24} className="w-6 h-6 grayscale opacity-50" />
                </div>
                <div className="text-[10px] font-orbitron tracking-[0.3em] text-slate-400 dark:text-slate-600 uppercase">
                   Elite Systems. Limitless Possibilities.

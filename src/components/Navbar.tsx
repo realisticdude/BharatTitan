@@ -5,7 +5,6 @@ import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
 import Image from "next/image";
 
 const AudioWaveform = ({ isPlaying, onClick }: { isPlaying: boolean; onClick: () => void }) => {

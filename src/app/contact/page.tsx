@@ -83,10 +83,10 @@ export default function Contact() {
         setIsSubmitted(false);
       }, 5000);
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Form submission error:', err);
       setIsError(true);
-      setErrorMessage(err.message || 'An error occurred while submitting the form. Please try again later.');
+      setErrorMessage(err instanceof Error ? err.message : 'An error occurred while submitting the form. Please try again later.');
       setTimeout(() => {
         setIsError(false);
         setErrorMessage('');
@@ -126,7 +126,7 @@ export default function Contact() {
                 GET IN <span className="text-accent drop-shadow-[0_0_10px_var(--accent)]">TOUCH</span>
               </h2>
               <p className="text-muted-foreground text-lg leading-relaxed font-sans">
-                Ready to forge something legendary? Signal our team and let's construct the future.
+                Ready to forge something legendary? Signal our team and let&apos;s construct the future.
               </p>
             </div>
 

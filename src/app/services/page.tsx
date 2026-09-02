@@ -1,27 +1,36 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
-import { Code, Globe, Shield, Smartphone, Zap, Database, Search, Layout, Settings, Rocket, Activity, Server, Cpu, CheckCircle2, ArrowRight, Send, X, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Code, Globe, Shield, Smartphone, Zap, Database, Search, Layout, Rocket, Activity, Server, CheckCircle2, Send, X, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { isValidEmail } from '@/lib/supabase';
+
+// Fixed positions/timings for the decorative signal particles (deterministic to avoid SSR/client hydration mismatches)
+const SIGNAL_PARTICLES = [
+  { x: 12, y: 68, duration: 3.1, delay: 0.4 },
+  { x: 84, y: 22, duration: 4.6, delay: 1.2 },
+  { x: 47, y: 90, duration: 2.7, delay: 0.1 },
+  { x: 63, y: 15, duration: 3.9, delay: 1.7 },
+  { x: 28, y: 55, duration: 4.2, delay: 0.8 },
+  { x: 75, y: 78, duration: 2.4, delay: 1.5 },
+];
 
 // Helper component for displaying numbers (with optional counting for simple numeric values)
 const CountingNumber = ({ value }: { value: string }) => {
   const [displayValue, setDisplayValue] = useState(value);
-  const [isCounting, setIsCounting] = useState(false);
 
   // Check if this is a simple numeric value we can animate
   const isNumeric = /^-?\d+(\.\d+)?(?:%|wks|weeks)?$/i.test(value.trim());
-  
+
   useEffect(() => {
     if (isNumeric) {
       // Extract just the number part
       const numStr = value.replace(/[^0-9.]/g, '');
       const num = parseFloat(numStr);
-      
+
       if (!isNaN(num)) {
-        setIsCounting(true);
         setDisplayValue('0');
         
         let current = 0;
@@ -30,7 +39,6 @@ const CountingNumber = ({ value }: { value: string }) => {
           current += step;
           if (current >= num) {
             setDisplayValue(value);
-            setIsCounting(false);
             clearInterval(interval);
           } else {
             // Keep the suffix
@@ -135,10 +143,10 @@ export default function Services() {
         setIsModalOpen(false);
       }, 5000);
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Form submission error:', err);
       setIsError(true);
-      setErrorMessage(err.message || 'An error occurred while submitting the form. Please try again later.');
+      setErrorMessage(err instanceof Error ? err.message : 'An error occurred while submitting the form. Please try again later.');
       setTimeout(() => {
         setIsError(false);
         setErrorMessage('');
@@ -223,7 +231,7 @@ export default function Services() {
               
               {/* Service Demo Image Placeholder */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-all duration-700 pointer-events-none scale-110 group-hover:scale-100">
-                <img src="/service-demo.jpg" alt="" className="w-full h-full object-cover" />
+                <Image src="/service-demo.jpg" alt="" fill className="object-cover" />
               </div>
 
               <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
@@ -353,7 +361,7 @@ export default function Services() {
               >
                 {/* Image Preview Layer */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-all duration-700 pointer-events-none -z-10 scale-110 group-hover:scale-100">
-                  <img src="/tech-preview.jpg" alt="" className="w-full h-full object-cover" />
+                  <Image src="/tech-preview.jpg" alt="" fill className="object-cover" />
                 </div>
                 
                 {/* Scan Line Effect */}
@@ -455,7 +463,7 @@ export default function Services() {
           >
             {/* Core Background Zoom */}
             <div className="absolute inset-0 opacity-10 pointer-events-none -z-10 scale-100 group-hover:scale-110 transition-transform duration-[10000ms] linear">
-              <img src="/core-bg.jpg" alt="" className="w-full h-full object-cover" />
+              <Image src="/core-bg.jpg" alt="" fill className="object-cover" />
             </div>
             
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-accent/20 transition-all duration-700"></div>
@@ -556,17 +564,17 @@ export default function Services() {
               transition={{ duration: 0.8 }}
               className="relative group rounded-xl overflow-hidden border border-white/5"
             >
-              <img src="/automation-demo.jpg" alt="Automation Demo" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
+              <Image src="/automation-demo.jpg" alt="Automation Demo" width={1600} height={2397} className="w-full h-auto object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
               {/* Animated Signals */}
               <div className="absolute inset-0 pointer-events-none">
-                {[...Array(6)].map((_, i) => (
-                  <motion.div 
+                {SIGNAL_PARTICLES.map((particle, i) => (
+                  <motion.div
                     key={i}
                     className="absolute w-1 h-1 bg-accent rounded-full blur-[1px]"
-                    initial={{ x: Math.random() * 100 + "%", y: Math.random() * 100 + "%", opacity: 0 }}
+                    initial={{ x: particle.x + "%", y: particle.y + "%", opacity: 0 }}
                     animate={{ y: ["0%", "100%"], opacity: [0, 1, 0] }}
-                    transition={{ duration: 2 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 2 }}
+                    transition={{ duration: particle.duration, repeat: Infinity, delay: particle.delay }}
                   />
                 ))}
               </div>

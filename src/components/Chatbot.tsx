@@ -94,7 +94,7 @@ export const Chatbot = () => {
     if (!text.trim()) return;
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       text: text,
       sender: 'user',
       timestamp: new Date()
@@ -106,7 +106,7 @@ export const Chatbot = () => {
 
     setTimeout(() => {
       const botResponse: Message = {
-        id: (Date.now() + 1).toString(),
+        id: crypto.randomUUID(),
         text: getBotResponse(text),
         sender: 'bot',
         timestamp: new Date()

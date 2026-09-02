@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Target, Eye, Zap, Cpu, Shield, Activity, Globe, Layout, Database, Server, Code, Layers, Rocket, CheckCircle2 } from 'lucide-react';
+import { Target, Eye, Zap, Cpu, Shield, Activity, Layout, Database, Server, Code, Layers } from 'lucide-react';
 
 // Helper component for counting numbers using Framer Motion's useSpring for performance
-const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: number }) => {
+const CountingNumber = ({ value }: { value: string }) => {
   const [isInView, setIsInView] = useState(false);
   const countRef = React.useRef(null);
   
@@ -53,7 +54,7 @@ export default function About() {
         >
           {/* Visual Background Core */}
           <div className="absolute inset-0 opacity-10 pointer-events-none -z-10">
-            <img src="/about-hero.jpg" alt="" className="w-full h-full object-cover" />
+            <Image src="/about-hero.jpg" alt="" fill className="object-cover" />
           </div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,80,0,0.15),transparent_60%)] -z-10"></div>
           
@@ -96,10 +97,12 @@ export default function About() {
             className="relative group"
           >
             <div className="absolute inset-0 bg-accent/20 blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
-            <img 
-              src="/origin-demo.jpg" 
-              alt="Origin Visual" 
-              className="rounded-xl opacity-80 w-full object-cover shadow-2xl shadow-accent/10 border border-white/5 group-hover:border-accent/30 transition-all duration-500" 
+            <Image
+              src="/origin-demo.jpg"
+              alt="Origin Visual"
+              width={1600}
+              height={1064}
+              className="rounded-xl opacity-80 w-full h-auto object-cover shadow-2xl shadow-accent/10 border border-white/5 group-hover:border-accent/30 transition-all duration-500"
             />
           </motion.div>
         </div>
@@ -133,7 +136,7 @@ export default function About() {
             >
               {/* Background Image Layer */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-all duration-700 pointer-events-none scale-110 group-hover:scale-100">
-                <img src="/demo-card.jpg" alt="" className="w-full h-full object-cover" />
+                <Image src="/demo-card.jpg" alt="" fill className="object-cover" />
               </div>
               
               {/* Scan Effect */}
@@ -209,7 +212,7 @@ export default function About() {
               >
                 {/* Image Placeholder Layer */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-all duration-500 -z-10 scale-110 group-hover:scale-100">
-                  <img src="/tech-demo.jpg" alt="" className="w-full h-full object-cover" />
+                  <Image src="/tech-demo.jpg" alt="" fill className="object-cover" />
                 </div>
                 
                 <div className="flex items-center gap-2 text-accent text-[10px] font-orbitron uppercase tracking-widest group-hover:scale-110 group-hover:translate-x-1 transition-all">
@@ -353,10 +356,12 @@ export default function About() {
               className="relative group"
             >
               <div className="absolute inset-0 bg-accent/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-              <img 
-                src="/team-demo.jpg" 
-                alt="Team Visual Proof" 
-                className="rounded-xl opacity-80 w-full object-cover border border-white/5 group-hover:border-accent/30 transition-all duration-500 shadow-2xl" 
+              <Image
+                src="/team-demo.jpg"
+                alt="Team Visual Proof"
+                width={1600}
+                height={1067}
+                className="rounded-xl opacity-80 w-full h-auto object-cover border border-white/5 group-hover:border-accent/30 transition-all duration-500 shadow-2xl"
               />
             </motion.div>
           </div>

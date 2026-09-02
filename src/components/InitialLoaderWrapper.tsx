@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LoadingScreen } from "./LoadingScreen";
 
 export function InitialLoaderWrapper({ children }: { children: React.ReactNode }) {

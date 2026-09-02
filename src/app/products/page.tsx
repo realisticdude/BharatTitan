@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Activity, Database, Globe, Layers, Layout, Lock, Terminal, Zap, ChevronRight, Cpu, Shield, Box } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { DataStreamBackground } from '@/components/DataStreamBackground';
 
 // Helper component for counting numbers
@@ -174,10 +175,11 @@ export default function Products() {
                 <div className="flex flex-col md:flex-row">
                   {/* Product Image (Left or Right based on index) */}
                   <div className={`relative w-full md:w-1/2 h-[300px] md:h-auto order-${index % 2 === 0 ? 2 : 1}`}>
-                    <img 
-                      src={product.image} 
-                      alt={product.name} 
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-1000" 
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover grayscale group-hover:grayscale-0 scale-105 group-hover:scale-100 transition-all duration-1000"
                     />
                     <div className={`absolute inset-0 bg-gradient-to-${index % 2 === 0 ? 'r' : 'l'} from-transparent via-card/10 to-card/80`}></div>
                   </div>
@@ -243,7 +245,7 @@ export default function Products() {
             >
               {/* Product Image Background (Mobile) */}
               <div className="absolute right-0 top-0 w-1/2 h-full opacity-10 pointer-events-none">
-                <img src={product.image} alt="" className="w-full h-full object-cover" />
+                <Image src={product.image} alt="" fill className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-card/40"></div>
               </div>
 

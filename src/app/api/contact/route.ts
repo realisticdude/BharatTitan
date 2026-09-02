@@ -125,7 +125,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true }, { status: 200 })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Contact API error:', JSON.stringify(error, null, 2))
     return NextResponse.json(
       { error: 'Internal server error' },

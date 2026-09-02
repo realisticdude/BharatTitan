@@ -1,31 +1,29 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { motion, useScroll, useSpring, useTransform, useMotionValue } from 'framer-motion';
-import { 
-  ArrowRight, 
-  Activity, 
-  Zap, 
-  CheckCircle2, 
-  HelpCircle, 
-  Code, 
-  Server, 
-  Layers, 
-  Layout, 
-  Database, 
+import Image from 'next/image';
+import { motion, useSpring, useTransform, useMotionValue } from 'framer-motion';
+import {
+  ArrowRight,
+  Activity,
+  Zap,
+  CheckCircle2,
+  Layers,
+  Layout,
   Rocket,
   Workflow,
   Network,
   Bot,
   TrendingUp,
-  X
+  X,
+  type LucideIcon
 } from 'lucide-react';
 import { DataStreamBackground } from '@/components/DataStreamBackground';
 import Link from 'next/link';
 import { AnimatePresence } from 'framer-motion';
 
 // Helper component for counting numbers using Framer Motion's useSpring for performance
-const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: number }) => {
+const CountingNumber = ({ value }: { value: string }) => {
   const [isInView, setIsInView] = useState(false);
   const countRef = React.useRef(null);
   
@@ -57,8 +55,20 @@ const CountingNumber = ({ value, duration = 2 }: { value: string, duration?: num
   );
 };
 
+const MotionImage = motion(Image);
+
+interface AutomationDetail {
+  title: string;
+  desc: string;
+  longDesc: string;
+  icon: React.ReactNode;
+  mainIcon: LucideIcon;
+  placeholders: string[];
+  images: string[];
+}
+
 // Modal Component for Automation Deep Dive
-const AutomationModal = ({ isOpen, onClose, data, theme }: { isOpen: boolean, onClose: () => void, data: any, theme: string }) => {
+const AutomationModal = ({ isOpen, onClose, data, theme }: { isOpen: boolean, onClose: () => void, data: AutomationDetail | null, theme: string }) => {
   // Close on ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -113,13 +123,20 @@ const AutomationModal = ({ isOpen, onClose, data, theme }: { isOpen: boolean, on
                 {data.longDesc}
               </p>
 
-              {/* Placeholder Grid */}
+              {/* Visual Grid */}
               <div className="space-y-4">
                 {/* Large Top Block */}
                 <div className="relative aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
+                  <Image
+                    src={data.images[0]}
+                    alt={`${data.title} visual`}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <div className="absolute inset-0 bg-accent/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="relative z-10 flex flex-col items-center gap-4 text-slate-500 dark:text-slate-500 light:text-slate-400">
-                    <data.mainIcon size={48} className="opacity-20" />
+                  <div className="relative z-10 flex flex-col items-center gap-4 text-slate-200">
+                    <data.mainIcon size={48} className="opacity-70" />
                     <span className="font-orbitron text-[10px] tracking-[0.4em] uppercase text-center">
                       {data.placeholders[0]}
                     </span>
@@ -128,15 +145,29 @@ const AutomationModal = ({ isOpen, onClose, data, theme }: { isOpen: boolean, on
 
                 {/* Smaller Bottom Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
-                    <div className="relative z-10 flex flex-col items-center gap-3 text-slate-500 dark:text-slate-500 light:text-slate-400 text-center px-4">
+                  <div className="relative aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
+                    <Image
+                      src={data.images[1]}
+                      alt={`${data.title} supporting visual 1`}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="relative z-10 flex flex-col items-center gap-3 text-slate-200 text-center px-4">
                       <span className="font-orbitron text-[8px] tracking-[0.3em] uppercase">
                         {data.placeholders[1]}
                       </span>
                     </div>
                   </div>
-                  <div className="aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
-                    <div className="relative z-10 flex flex-col items-center gap-3 text-slate-500 dark:text-slate-500 light:text-slate-400 text-center px-4">
+                  <div className="relative aspect-video bg-black/20 dark:bg-black/20 light:bg-slate-200/50 border border-white/5 dark:border-white/5 light:border-slate-200 rounded-xl flex items-center justify-center group overflow-hidden">
+                    <Image
+                      src={data.images[2]}
+                      alt={`${data.title} supporting visual 2`}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="relative z-10 flex flex-col items-center gap-3 text-slate-200 text-center px-4">
                       <span className="font-orbitron text-[8px] tracking-[0.3em] uppercase">
                         {data.placeholders[2]}
                       </span>
@@ -154,7 +185,6 @@ const AutomationModal = ({ isOpen, onClose, data, theme }: { isOpen: boolean, on
 
 export default function Home() {
   const [isBooted, setIsBooted] = useState(false);
-  const [activeActivityImage, setActiveActivityImage] = useState<string | null>(null);
   const [activeActivityIndex, setActiveActivityIndex] = useState(0);
   const [isHoveringActivity, setIsHoveringActivity] = useState(false);
 
@@ -164,23 +194,19 @@ export default function Home() {
     { text: "API integration completed", time: "1w ago", img: "/demo-activity-3.webp" }
   ];
 
+  // Image always mirrors the active index, whether set by auto-cycle or hover
+  const activeActivityImage = activityFeedItems[activeActivityIndex]?.img ?? null;
+
   // Auto-cycle Activity Feed
   useEffect(() => {
     if (isHoveringActivity) return;
-    
+
     const interval = setInterval(() => {
       setActiveActivityIndex((prev) => (prev + 1) % activityFeedItems.length);
     }, 3000);
 
     return () => clearInterval(interval);
   }, [isHoveringActivity, activityFeedItems.length]);
-
-  // Sync image with index when not hovering
-  useEffect(() => {
-    if (!isHoveringActivity) {
-      setActiveActivityImage(activityFeedItems[activeActivityIndex].img);
-    }
-  }, [activeActivityIndex, isHoveringActivity]);
   const [activeWhoIndex, setActiveWhoIndex] = useState(0);
   const [activeModal, setActiveModal] = useState<number | null>(null);
 
@@ -192,7 +218,8 @@ export default function Home() {
       longDesc: "Revolutionize your operational efficiency with complex multi-step processes automated using n8n and our custom-built orchestration engines. We design resilient pipelines that handle repetitive tasks with 100% precision.",
       icon: <Workflow className="text-accent" size={18} />,
       mainIcon: Workflow,
-      placeholders: ["WORKFLOW DIAGRAM", "INTEGRATION FLOW", "AUTOMATION EXAMPLE"]
+      placeholders: ["WORKFLOW DIAGRAM", "INTEGRATION FLOW", "AUTOMATION EXAMPLE"],
+      images: ["/automation-modal-workflow-1.jpg", "/automation-modal-workflow-2.jpg", "/automation-modal-workflow-3.jpg"]
     },
     { 
       title: "API Automation", 
@@ -200,7 +227,8 @@ export default function Home() {
       longDesc: "Build lightning-fast connectivity between your systems. Our API automation solutions ensure seamless data flow and real-time event handling, reducing latency and manual synchronization efforts.",
       icon: <Network className="text-accent" size={18} />,
       mainIcon: Network,
-      placeholders: ["API ARCHITECTURE", "API FLOW", "REQUEST / RESPONSE"]
+      placeholders: ["API ARCHITECTURE", "API FLOW", "REQUEST / RESPONSE"],
+      images: ["/automation-modal-api-1.jpg", "/automation-modal-api-2.jpg", "/automation-modal-api-3.jpg"]
     },
     { 
       title: "AI Agents", 
@@ -208,7 +236,8 @@ export default function Home() {
       longDesc: "Deploy smart, context-aware AI agents that can reason through complex tasks. Our agents are designed to integrate into your existing workflows, providing intelligent decision-making and semi-autonomous execution.",
       icon: <Bot className="text-accent" size={18} />,
       mainIcon: Bot,
-      placeholders: ["AGENT ARCHITECTURE", "AGENT WORKFLOW", "USE CASE EXAMPLE"]
+      placeholders: ["AGENT ARCHITECTURE", "AGENT WORKFLOW", "USE CASE EXAMPLE"],
+      images: ["/automation-modal-agents-1.jpg", "/automation-modal-agents-2.jpg", "/automation-modal-agents-3.jpg"]
     },
     { 
       title: "Process Optimization", 
@@ -216,7 +245,8 @@ export default function Home() {
       longDesc: "Transform your business bottlenecks into competitive advantages. We analyze your existing processes and implement data-driven optimization strategies that scale with your growth and reduce operational overhead.",
       icon: <TrendingUp className="text-accent" size={18} />,
       mainIcon: TrendingUp,
-      placeholders: ["PROCESS FLOW", "BEFORE / AFTER", "OPTIMIZATION RESULTS"]
+      placeholders: ["PROCESS FLOW", "BEFORE / AFTER", "OPTIMIZATION RESULTS"],
+      images: ["/automation-modal-optimization-1.jpg", "/automation-modal-optimization-2.jpg", "/automation-modal-optimization-3.jpg"]
     }
   ];
 
@@ -260,10 +290,12 @@ export default function Home() {
         >
           <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background z-10"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10"></div>
-          <img 
-              src="/hero-wolf.png" 
-              alt="Futuristic Wolf Pack" 
-              className="w-full h-full object-cover object-center mix-blend-normal dark:mix-blend-lighten opacity-50 dark:opacity-100"
+          <Image
+              src="/hero-wolf.png"
+              alt="Futuristic Wolf Pack"
+              fill
+              priority
+              className="object-cover object-center mix-blend-normal dark:mix-blend-lighten opacity-50 dark:opacity-100"
           />
           <div className="absolute inset-0 bg-accent/10 mix-blend-overlay z-10 hidden dark:block"></div>
         </motion.div>
@@ -321,7 +353,7 @@ export default function Home() {
             className="light:text-black dark:text-slate-400 text-lg md:text-2xl max-w-2xl mb-12 font-sans tracking-wide transition-colors duration-500"
           >
             We engineer elite digital systems that redefine performance. 
-            BharatTitan is the source behind India's next-gen innovation.
+            BharatTitan is the source behind India&apos;s next-gen innovation.
           </motion.p>
 
           {/* Action Buttons */}
@@ -444,10 +476,11 @@ export default function Home() {
       <section className="relative z-20 py-32 px-6 border-t border-white/5 bg-[#000000] overflow-hidden">
         {/* Background Image Layer */}
         <div className="absolute inset-0 opacity-60 pointer-events-none">
-          <motion.img 
-            src="/demo-automation-bg.png" 
-            alt="" 
-            className="w-full h-full object-contain will-change-transform"
+          <MotionImage
+            src="/demo-automation-bg.png"
+            alt=""
+            fill
+            className="object-contain will-change-transform"
             animate={{ rotate: 360 }}
             transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
             style={{ scale: 1.5 }}
@@ -633,7 +666,7 @@ export default function Home() {
               { 
                 label: "Frontend", 
                 val: "React / Next.js", 
-                icon: (props: any) => (
+                icon: (props: React.SVGProps<SVGSVGElement>) => (
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} className={`${props.className} text-[#61DAFB]`}>
                     <circle cx="12" cy="12" r="2" fill="currentColor"/>
                     <path d="M12 7c3.31 0 6 2.24 6 5s-2.69 5-6 5-6-2.24-6-5 2.69-5 6-5z"/>
@@ -645,7 +678,7 @@ export default function Home() {
               { 
                 label: "Backend", 
                 val: "Node.js", 
-                icon: (props: any) => (
+                icon: (props: React.SVGProps<SVGSVGElement>) => (
                   <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#339933]`}>
                     <path d="M11.992 0L3.18 5.087v10.174l8.812 5.087 8.812-5.087V5.087zm0 18.23l-7.05-4.07V6.027l7.05-4.07 7.05 4.07v8.133z"/>
                     <path d="M11.992 4.103L6.117 7.493v6.78l5.875 3.39 5.875-3.39V7.493z"/>
@@ -655,7 +688,7 @@ export default function Home() {
               { 
                 label: "Automation", 
                 val: "n8n", 
-                icon: (props: any) => (
+                icon: (props: React.SVGProps<SVGSVGElement>) => (
                   <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#FF6C5C]`}>
                     <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.5 17.5l-2.5-1.5-2.5 1.5V11l5 3v3.5zM7.5 6.5l2.5 1.5 2.5-1.5V13l-5-3V6.5z"/>
                   </svg>
@@ -664,7 +697,7 @@ export default function Home() {
               { 
                 label: "Cloud", 
                 val: "AWS", 
-                icon: (props: any) => (
+                icon: (props: React.SVGProps<SVGSVGElement>) => (
                   <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#FF9900]`}>
                     <path d="M13.882 11.235c.01-.15.01-.301 0-.45l-.031-.15a.417.417 0 0 0-.15-.15c-.05-.031-.1-.05-.15-.05-.1 0-.2.05-.25.1a.456.456 0 0 0-.1.25c-.01.15-.01.301 0 .45l.031.15c.031.05.07.1.1.15.05.031.1.05.15.05.1 0 .2-.05.25-.1a.456.456 0 0 0 .1-.25z"/>
                     <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.05 14.95l-1.45.6c-.15.05-.35.1-.55.1h-.25c-.35 0-.7-.1-.9-.35l-.35-.35c-.15-.15-.25-.3-.35-.5-.1-.2-.15-.4-.2-.65v-.7c.05-.25.1-.5.2-.75.1-.2.2-.4.35-.55l.35-.35c.2-.25.55-.35.9-.35h.25c.2 0 .4 0 .55.1l1.45.6c.15.05.25.15.25.3s-.05.25-.2.3l-1.4.65c-.05.05-.1.05-.1.1v.2c0 .05.05.05.1.1l1.4.65c.15.05.2.15.2.3 0 .15-.1.25-.25.3zM9.55 12.8c.05.1.05.2.1.3s.05.15.05.25v.1c0 .1-.05.2-.1.3-.05.1-.15.2-.25.25l-.45.2c-.15.05-.3.1-.45.1-.1 0-.2 0-.3-.05l-.35-.15-.3-.2c-.1-.1-.15-.2-.2-.3-.05-.1-.05-.2-.1-.3v-.1c0-.1.05-.2.1-.3.05-.1.15-.2.25-.25l.45-.2c.15-.05.3-.1.45-.1.1 0 .2 0 .3.05l.35.15.3.2z"/>
@@ -674,7 +707,7 @@ export default function Home() {
               { 
                 label: "Database", 
                 val: "MongoDB / PostgreSQL", 
-                icon: (props: any) => (
+                icon: (props: React.SVGProps<SVGSVGElement>) => (
                   <svg viewBox="0 0 24 24" fill="currentColor" {...props} className={`${props.className} text-[#47A248]`}>
                     <path d="M12 0L3.18 5.087v10.174l8.812 5.087 8.812-5.087V5.087zm0 18.23l-7.05-4.07V6.027l7.05-4.07 7.05 4.07v8.133z"/>
                     <circle cx="12" cy="12" r="3"/>
@@ -692,7 +725,7 @@ export default function Home() {
               >
                 {/* Hover Image Layer */}
                 <div className="absolute inset-0 opacity-20 group-hover:opacity-50 transition-all duration-700 scale-110 group-hover:scale-105 pointer-events-none">
-                  <img src="/demo-tech.webp" alt="" className="w-full h-full object-cover" />
+                  <Image src="/demo-tech.webp" alt="" fill className="object-cover" />
                 </div>
 
                 {/* Scanning Line Effect */}
@@ -749,7 +782,6 @@ export default function Home() {
                   onMouseEnter={() => {
                     setIsHoveringActivity(true);
                     setActiveActivityIndex(i);
-                    setActiveActivityImage(item.img);
                   }}
                   onMouseLeave={() => {
                     setIsHoveringActivity(false);
@@ -784,14 +816,15 @@ export default function Home() {
               
               <div className="relative h-[350px] w-full border border-white/5 rounded-lg overflow-hidden bg-black backdrop-blur-sm">
                 {activeActivityImage ? (
-                  <motion.img 
+                  <MotionImage
                     key={activeActivityImage}
                     initial={{ opacity: 0, scale: 1.1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
-                    src={activeActivityImage} 
+                    src={activeActivityImage}
                     alt="Activity Preview"
-                    className="w-full h-full object-cover relative z-10" 
+                    fill
+                    className="object-cover relative z-10"
                   />
                 ) : (
                   <div className="w-full h-full bg-black relative z-10"></div>
@@ -947,7 +980,7 @@ export default function Home() {
       <section className="relative z-20 py-24 px-6 border-t border-white/5 bg-[#15191E] overflow-hidden">
         {/* Verification Badge Background */}
         <div className="absolute inset-0 flex items-center justify-center opacity-60 pointer-events-none">
-          <img src="/verification-badge.png" alt="" className="w-54 h-54 md:w-76 md:h-76 blur-[.5rem]" />
+          <Image src="/verification-badge.png" alt="" width={304} height={304} className="w-54 h-54 md:w-76 md:h-76 blur-[.5rem]" />
         </div>
         
         <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
