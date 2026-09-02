@@ -239,6 +239,7 @@ export const Chatbot = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Close chat" : "Open chat"}
           className="group relative w-16 h-16 rounded-full bg-background/60 backdrop-blur-xl border border-accent/40 flex items-center justify-center shadow-[0_0_20px_rgba(var(--accent),0.15),inset_0_0_20px_rgba(var(--accent),0.05)] hover:border-accent/60 hover:shadow-[0_0_30px_rgba(var(--accent),0.3),inset_0_0_30px_rgba(var(--accent),0.1)] transition-all overflow-hidden"
         >
           {/* Glow ring effect */}

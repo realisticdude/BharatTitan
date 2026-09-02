@@ -85,16 +85,17 @@ export const Footer = () => {
 
   <div className="flex gap-4">
     {[
-      { Icon: X, url: "https://x.com/BharatTitan" },
-      { Icon: Linkedin, url: "https://www.linkedin.com/company/bharattitan" },
-      { Icon: Instagram, url: "https://instagram.com/bharattitanofficial" },
-      { Icon: Youtube, url: "https://www.youtube.com/@BharatTitanOfficial" },
-    ].map(({ Icon, url }, i) => (
+      { Icon: X, url: "https://x.com/BharatTitan", name: "X (Twitter)" },
+      { Icon: Linkedin, url: "https://www.linkedin.com/company/bharattitan", name: "LinkedIn" },
+      { Icon: Instagram, url: "https://instagram.com/bharattitanofficial", name: "Instagram" },
+      { Icon: Youtube, url: "https://www.youtube.com/@BharatTitanOfficial", name: "YouTube" },
+    ].map(({ Icon, url, name }, i) => (
       <a
         key={i}
         href={url}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={name}
         className="w-10 h-10 rounded-lg bg-secondary/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent hover:shadow-[0_0_15px_rgba(var(--accent),0.5)] transition-all duration-300 hover:scale-110"
       >
         <Icon size={18} />
