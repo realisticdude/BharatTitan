@@ -229,6 +229,19 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportConfig}
               transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
+              onClick={() => {
+                setSelectedInquiry(service.title);
+                setIsModalOpen(true);
+              }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setSelectedInquiry(service.title);
+                  setIsModalOpen(true);
+                }
+              }}
               className="group bg-card/40 backdrop-blur-md p-8 border border-white/5 hover:border-accent relative overflow-hidden transition-all duration-500 rounded-xl hover:-translate-y-2 hover:scale-[1.02] cursor-pointer"
               style={{ perspective: "1000px" }}
             >
