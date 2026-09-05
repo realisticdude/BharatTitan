@@ -14,6 +14,7 @@ export const DataStreamBackground = () => {
 
     let animationFrameId: number;
     let particles: Particle[] = [];
+    let isVisible = true;
 
     // Resize handling
     const resizeCanvas = () => {
@@ -84,16 +85,29 @@ export const DataStreamBackground = () => {
 
     const animate = () => {
       if (!ctx || !canvas) return;
-      ctx.fillStyle = 'rgba(10, 15, 30, 0.2)'; // Trail effect (Deep void black with blue tint)
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      particles.forEach(particle => {
-        particle.update();
-        particle.draw();
-      });
+      // Skip drawing while off-screen or the tab is backgrounded, but keep
+      // requesting frames so it resumes instantly once visible again.
+      if (isVisible && !document.hidden) {
+        ctx.fillStyle = 'rgba(10, 15, 30, 0.2)'; // Trail effect (Deep void black with blue tint)
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(particle => {
+          particle.update();
+          particle.draw();
+        });
+      }
 
       animationFrameId = requestAnimationFrame(animate);
     };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -101,6 +115,7 @@ export const DataStreamBackground = () => {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
