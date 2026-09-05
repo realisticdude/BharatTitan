@@ -56,7 +56,9 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
         // At 100%
         setTimeout(() => {
           setIsCounting(false);
-          setShowInteraction(true);
+          // Wait for the counter's exit fade (~0.3s) to finish before the
+          // "Enter Experience" text fades in, so the two don't overlap.
+          setTimeout(() => setShowInteraction(true), 300);
         }, 200); // Slight pause (100-200ms)
       }
     };
