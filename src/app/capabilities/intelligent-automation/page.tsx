@@ -26,7 +26,7 @@ export default function IntelligentAutomation() {
   ];
 
   const stats = [
-    { value: "50+", label: "Automations Delivered" },
+    { value: "20+", label: "Automations Delivered" },
     { value: "70%+", label: "Time Saved" },
     { value: "24/7", label: "Reliable Execution" }
   ];

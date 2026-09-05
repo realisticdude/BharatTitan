@@ -26,9 +26,9 @@ export default function DataStreamProcessing() {
   ];
 
   const stats = [
-    { value: "100M+", label: "Events Processed" },
-    { value: "1TB+", label: "Data Handled Daily" },
-    { value: "99.99%", label: "Accuracy Rate" }
+    { value: "2M+", label: "Events Processed" },
+    { value: "25GB+", label: "Data Handled Daily" },
+    { value: "99.9%", label: "Accuracy Rate" }
   ];
 
   return (

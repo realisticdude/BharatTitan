@@ -377,7 +377,7 @@ export default function About() {
                     { label: "Systems Online", value: "15+" },
                     { label: "Elite Partners", value: "5+" },
                     { label: "Cycles Active", value: "10+" },
-                    { label: "Awards Unlocked", value: "5+" }
+                    { label: "Milestones Unlocked", value: "5+" }
                 ].map((stat, i) => (
                     <motion.div 
                       key={i} 

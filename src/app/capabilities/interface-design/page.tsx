@@ -26,7 +26,7 @@ export default function InterfaceDesign() {
   ];
 
   const stats = [
-    { value: "40+", label: "Interfaces Designed" },
+    { value: "25+", label: "Interfaces Designed" },
     { value: "95%+", label: "Client Satisfaction" },
     { value: "100%", label: "Responsive" }
   ];
