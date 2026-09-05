@@ -337,7 +337,8 @@ export default function Home() {
               className="relative inline-block"
             >
                <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent/80 to-accent/60">PACK</span>
-               <motion.span 
+               <motion.span
+                 aria-hidden="true"
                  animate={{ opacity: [0.3, 0.6, 0.3] }}
                  transition={{ duration: 2, repeat: Infinity }}
                  className="absolute inset-0 text-accent blur-lg z-0"
