@@ -18,9 +18,41 @@ const orbitron = Orbitron({
   display: "swap",
 });
 
+const SITE_NAME = "BharatTitan";
+const SITE_DESCRIPTION =
+  "Forging the future of Indian technology with elite digital solutions and premium innovation.";
+
 export const metadata: Metadata = {
-  title: "BharatTitan | Elite Digital Systems",
-  description: "Forging the future of Indian technology with elite digital solutions and premium innovation.",
+  metadataBase: new URL("https://www.bharattitan.com"),
+  title: {
+    default: "BharatTitan | Elite Digital Systems",
+    template: "%s | BharatTitan",
+  },
+  description: SITE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: "BharatTitan | Elite Digital Systems",
+    description: SITE_DESCRIPTION,
+    url: "/",
+    locale: "en_IN",
+    images: [
+      {
+        url: "/company-logo.png",
+        alt: "BharatTitan",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@BharatTitan",
+    title: "BharatTitan | Elite Digital Systems",
+    description: SITE_DESCRIPTION,
+    images: ["/company-logo.png"],
+  },
 };
 
 export default function RootLayout({
